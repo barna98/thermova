@@ -1,0 +1,16 @@
+{
+  "name": "thermova",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "THERMOVA bilingual, statically rendered commerce frontend",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/server.mjs",
+    "start": "node scripts/server.mjs --production",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

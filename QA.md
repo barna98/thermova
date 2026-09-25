@@ -1,0 +1,36 @@
+# Ellenőrzési jegyzőkönyv
+
+## Automatizált ellenőrzés
+
+`npm test`: 10/10 sikeres teszt.
+
+- Standard telepítés 109 000 Ft; több készülék összegei helyesek.
+- Összetett szűrés: méret, használat, ár, márka.
+- Numerikus rendezés; nincs a megadott feltételeket megsértő ajánlás.
+- Több klíma és minden hőszivattyú esetén emberi ellenőrzés.
+- Hibás kosáradatok kizárása, régi kosáradatok biztonságos migrációja.
+- Minden magyar és angol útvonal renderelhető, pontosan egy h1 címsorral.
+- Nem létező termék: 404. Üres kosárból nyitott készülékigény nem okoz renderelési hibát.
+- Felhasználói szöveg és fájlnév HTML-escape; fájlmező opcionális.
+- Vegyes kosár: csak a telepítést kérő változatokhoz számolunk szerelési díjat.
+- Vegyes ajánlatban megmaradnak a szerelés nélküli készülékek; 2+ készüléknél emberi ellenőrzés szükséges.
+
+`npm run build`: 63 statikus tartalmi oldal és egy 404 oldal létrejön.
+
+## Böngészős ellenőrzés
+
+Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokkal.
+
+- Klímaszűrés: 25–35 m² és elsődleges fűtés → Nordic 35.
+- Szerelés nélkül kiválasztott Comfort 35: 329 900 Ft; a kosárban 0 Ft szerelés.
+- Ugyanaz a Comfort 35 szereléssel és anélkül: két külön kosársor, 659 800 Ft készülék + 109 000 Ft szerelés = 768 800 Ft.
+- Vegyes kosár továbbadása: egy szerelendő helyiség, egy további szerelés nélküli készülék; az összeg változatlan.
+- Klímás ajánlatkérés mind a négy lépése: lakás, emelet, erkély; kültéri hely, munkamagasság, megközelíthetőség; fotó nélkül továbblépés; tesztkapcsolat; előkészített, nem elküldött összefoglaló.
+- Hőszivattyús folyamat: új építés, terület, padlófűtés, nincs meglévő hőtermelő; funkcióválasztás hiányában valódi hibaüzenet; dokumentum nélkül továbblépés.
+- HU → EN váltás az ajánlatkérés harmadik lépésén: a lépés és a választások megmaradnak.
+- Mobil termékoldal: a változatváltást követi a rögzített kosárgomb felirata és ára.
+- Főoldal, angol klímakategória, klímatermékoldal és hőszivattyús ajánlatkérés: 320, 768 és 1440 px szélességen nincs vízszintes túlcsordulás.
+- Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; arculati fotók betöltése és képkivágása.
+- A vizsgált folyamatokban nem keletkezett JavaScript konzolhiba.
+
+A teszt nem minősül teljes WCAG-auditnak. Fizetés, szerveroldali fájlfeltöltés és valós ajánlatküldés nincs bekötve, ezért ilyen folyamat sikerességét nem állítjuk.

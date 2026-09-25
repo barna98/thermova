@@ -1,0 +1,94 @@
+import { home } from "./pages/home.js";
+import { locale, escape as e } from "./i18n.js";
+import { header, footer } from "./components.js";
+import {
+  catalogue,
+  productPage,
+  hpCatalogue,
+  hpProduct,
+} from "./pages/shop.js";
+import { selector, quotePage } from "./pages/forms.js";
+import { information } from "./pages/information.js";
+import { newQuote, product, system } from "./domain.js";
+export function parseRoute(pathname) {
+  const parts = pathname.split("/").filter(Boolean);
+  const lang = parts[0] === "en" ? "en" : "hu";
+  if (["hu", "en"].includes(parts[0])) parts.shift();
+  return { lang, path: parts.join("/") };
+}
+export function renderPage(lang, path = "", state = {}) {
+  const c = locale(lang);
+  let html, title;
+  const [base, id] = path.split("/");
+  if (!path) {
+    html = home(c);
+    title = c.t(
+      "Klíma és hőszivattyú, szakértelemmel",
+      "Air conditioning and heat pumps, with expertise",
+    );
+  } else if (base === "klimak") {
+    html = id
+      ? productPage(c, id, state.purchaseOptions?.[id] ?? true)
+      : catalogue(c, state.filters);
+    title = id
+      ? `${product(id)?.brand || ""} ${product(id)?.name || ""}`
+      : c.t(
+          "Klímák, átlátható telepítési árakkal",
+          "Air conditioners with clear installation pricing",
+        );
+  } else if (base === "hoszivattyuk") {
+    html = id ? hpProduct(c, id) : hpCatalogue(c);
+    title = id
+      ? `${system(id)?.brand || ""} ${system(id)?.name || ""}`
+      : c.t("Hőszivattyúrendszerek", "Heat pump systems");
+  } else if (base === "valaszto") {
+    html = selector(c, state.selector);
+    title = c.t(
+      "Klímaválasztó három kérdésben",
+      "Find your AC in three questions",
+    );
+  } else if (["ajanlat", "rendszer-ajanlat", "keszulekigeny"].includes(base)) {
+    html = quotePage(
+      c,
+      state.quote ||
+        newQuote(
+          base === "rendszer-ajanlat"
+            ? "hp"
+            : base === "keszulekigeny"
+              ? "device"
+              : "ac",
+        ),
+    );
+    title = c.t("Ajánlatkérés", "Request a quote");
+  } else {
+    html = information(c, path);
+    title = {
+      telepites: c.t(
+        "Standard telepítés – 109 000 Ft",
+        "Standard installation – 109,000 HUF",
+      ),
+      rolunk: c.t("A Thermova", "About Thermova"),
+      szolgaltatasok: c.t("Szolgáltatások", "Services"),
+      tudastar: c.t("Választási útmutató", "Buying guide"),
+      kapcsolat: c.t("Kapcsolat", "Contact"),
+      adatkezeles: c.t("Adatkezelés", "Privacy"),
+    }[path];
+  }
+  if (!html) {
+    html = `<section class="container section empty-state"><p class="eyebrow">404</p><h1>${c.t("Ez az oldal nem található.", "This page could not be found.")}</h1><a class="button" href="${c.url("klimak")}">${c.t("Vissza a klímákhoz", "Back to air conditioners")}</a></section>`;
+    title = "404";
+  }
+  return {
+    body: `${header(c, path)}<main id="main" tabindex="-1">${html}</main>${footer(c)}`,
+    title: `${title} | THERMOVA`,
+    notFound: title === "404",
+    description: c.t(
+      "THERMOVA – átgondolt klíma- és hőszivattyú-megoldások. Egyszerű választás, átlátható árak és standard klímatelepítés 109 000 Ft-ért.",
+      "THERMOVA – considered air conditioning and heat pump solutions. Simple choices, transparent pricing and standard AC installation for 109,000 HUF.",
+    ),
+  };
+}
+export function documentHTML(lang, path, state = {}) {
+  const page = renderPage(lang, path, state);
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#F4F4F2"><title>${e(page.title)}</title><meta name="description" content="${e(page.description)}"><meta name="robots" content="noindex,nofollow"><meta property="og:title" content="${e(page.title)}"><meta property="og:description" content="${e(page.description)}"><meta property="og:type" content="website"><link rel="alternate" hreflang="hu" href="/hu/${path ? path + "/" : ""}"><link rel="alternate" hreflang="en" href="/en/${path ? path + "/" : ""}"><link rel="icon" href="/assets/mark.svg" type="image/svg+xml"><link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/brand.css">${!path ? '<link rel="preload" as="image" href="/assets/architecture.webp">' : ""}<script type="module" src="/src/app.js"></script></head><body>${page.body}<noscript><p class="noscript">${lang === "hu" ? "Az ajánlatkéréshez és a kosárhoz JavaScript szükséges. A termékoldalak továbbra is olvashatók." : "Quote requests and the bag require JavaScript. Product pages remain readable."}</p></noscript></body></html>`;
+}
