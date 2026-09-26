@@ -1,6 +1,6 @@
 # Képi anyag és márkaazonosság
 
-A fő logó a felhasználó által feltöltött `Képernyőfotó 2026-09-18 - 21.07.48.png` változatlan másolata: `public/assets/thermova-original-logo.png`. A felület CSS-sel rejti el az eredeti kép külső üres margóját. Nem helyettesítettük betűtípussal. A logó minőségének felső határa az átadott raszteres forrás; később ugyanide illeszthető az eredeti vektoros logó.
+A korábbi képernyőfotó-alapú logó archivált forrásként megmaradt `public/assets/thermova-original-logo.png` néven. A felületen használt, tisztább `public/assets/thermova-wordmark.png` közvetlenül a felhasználó által átadott arculati board nagy logójából készült pontos kivágással, további átrajzolás nélkül. A végleges vektoros SVG/PDF logó később ugyanide illeszthető.
 
 Az arculati board változatlan referencia: `public/assets/thermova-brand-board.png`.
 

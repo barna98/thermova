@@ -35,6 +35,8 @@ Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokka
 - Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; arculati fotók betöltése és képkivágása.
 - 390 px mobilmenü: panelanimáció, sorszámozott navigáció, stabil kör alakú bezárógomb és fókusz-visszaadás.
 - A karakteres CTA-nyilak és pipák helyett egységes SVG/CSS jelek jelennek meg.
+- A produkciós képernyőképek alapján javítva: megszűnt a fő tartalom kék fókuszkerete, a logó tiszta arculati-board kivágást használ, a klímakategória nyitóblokkja képes szerkesztői elrendezést kapott.
+- A fő és kategória hero-képek aszimmetrikus építészeti vágást, látható narancs sarokrészletet és visszafogott képátmenetet használnak.
 - A vizsgált folyamatokban nem keletkezett JavaScript konzolhiba.
 
 A teszt nem minősül teljes WCAG-auditnak. Fizetés, szerveroldali fájlfeltöltés és valós ajánlatküldés nincs bekötve, ezért ilyen folyamat sikerességét nem állítjuk.

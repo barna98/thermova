@@ -2144,3 +2144,197 @@ button:hover > .ui-arrow {
     font-size: 12px;
   }
 }
+
+/* Visual revision based on the production screenshots. */
+:root {
+  --page-surface: #efeee9;
+  --content-surface: #f7f6f2;
+}
+body {
+  background: var(--page-surface);
+}
+main {
+  background: var(--content-surface);
+}
+main:focus,
+main:focus-visible {
+  outline: none;
+}
+.header {
+  background: rgba(255, 255, 255, 0.98);
+}
+.original-wordmark {
+  aspect-ratio: 7;
+  overflow: hidden;
+  background: #fff;
+}
+.original-wordmark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: none;
+}
+.tagline {
+  margin-top: 7px;
+  color: #26323e;
+}
+.hero-image {
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 46px), calc(100% - 46px) 100%, 0 100%);
+  box-shadow: 0 30px 75px rgba(31, 41, 55, 0.14);
+}
+.hero-image:after {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: linear-gradient(135deg, transparent 48%, var(--orange) 49%);
+}
+.category-path,
+.product-visual,
+.detail-visual,
+.catalogue-intro-media {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+}
+.product-visual:after,
+.category-path:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 23px;
+  height: 23px;
+  background: linear-gradient(135deg, transparent 47%, rgba(240, 90, 40, 0.78) 49%);
+  pointer-events: none;
+}
+.catalogue-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1.14fr);
+  gap: clamp(48px, 7vw, 110px);
+  align-items: stretch;
+  padding-block: 52px 72px;
+  min-height: 560px;
+}
+.catalogue-intro > div {
+  align-self: center;
+  padding-block: 30px;
+}
+.catalogue-intro h1 {
+  max-width: 720px;
+}
+.catalogue-intro > div > p:not(.eyebrow) {
+  max-width: 570px;
+}
+.catalogue-intro .text-link {
+  margin-top: 10px;
+}
+.catalogue-intro-media {
+  margin: 0;
+  min-height: 470px;
+  position: relative;
+  overflow: hidden;
+  background: #c5c7c5;
+  box-shadow: 0 26px 65px rgba(31, 41, 55, 0.12);
+}
+.catalogue-intro-media img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
+  object-position: 55% center;
+  animation: media-entrance 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), filter 400ms ease;
+}
+.catalogue-intro-media:after {
+  content: "";
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, rgba(13, 22, 30, 0.76));
+  pointer-events: none;
+}
+.catalogue-intro-media:before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  border-top: 2px solid var(--orange);
+  border-right: 2px solid var(--orange);
+  z-index: 2;
+}
+.catalogue-intro-media:hover img {
+  transform: scale(1.03);
+  filter: saturate(1.05) contrast(1.02);
+}
+.catalogue-intro-media figcaption {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 28px;
+  z-index: 3;
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  padding-top: 16px;
+}
+.catalogue-intro-media figcaption span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+.catalogue-intro-media figcaption strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.catalogue-intro + .sample-note {
+  margin-top: 0;
+}
+@media (max-width: 900px) {
+  .catalogue-intro {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    min-height: 0;
+    padding-block: 34px 52px;
+  }
+  .catalogue-intro-media {
+    min-height: 440px;
+  }
+}
+@media (max-width: 640px) {
+  :root {
+    --page-surface: #ecebe5;
+    --content-surface: #f7f6f2;
+  }
+  .original-wordmark {
+    aspect-ratio: 7;
+  }
+  .tagline {
+    margin-top: 4px;
+  }
+  .hero-image {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%);
+  }
+  .hero-image:after {
+    width: 30px;
+    height: 30px;
+  }
+  .catalogue-intro {
+    padding-top: 20px;
+    gap: 24px;
+  }
+  .catalogue-intro > div {
+    padding-block: 20px 0;
+  }
+  .catalogue-intro-media {
+    min-height: 360px;
+  }
+  .catalogue-intro-media figcaption {
+    left: 20px;
+    right: 20px;
+    bottom: 21px;
+  }
+}
