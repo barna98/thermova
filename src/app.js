@@ -104,11 +104,28 @@ function loadRoute() {
 }
 function render({ focus = null, scroll = false } = {}) {
   const page = renderPage(c.lang, route.path, state);
+  const canonical = `${config.siteOrigin}/${c.lang}/${route.path ? route.path + "/" : ""}`;
+  const indexable = [
+    "",
+    "telepites",
+    "szolgaltatasok",
+    "rolunk",
+    "tudastar",
+    "kapcsolat",
+  ].includes(route.path);
   document.body.innerHTML = page.body;
   document.title = page.title;
   document.documentElement.lang = c.lang;
   document.querySelector('meta[name="description"]').content = page.description;
+  document.querySelector('meta[name="robots"]').content =
+    !page.notFound && indexable ? "index,follow" : "noindex,follow";
+  document.querySelector('link[rel="canonical"]').href = page.notFound
+    ? `${config.siteOrigin}/404.html`
+    : canonical;
   document.querySelector('meta[property="og:title"]').content = page.title;
+  document.querySelector('meta[property="og:url"]').content = page.notFound
+    ? `${config.siteOrigin}/404.html`
+    : canonical;
   document
     .querySelectorAll("link[hreflang]")
     .forEach(
@@ -129,6 +146,14 @@ function updateCartBadge() {
   document.querySelectorAll(".cart-count").forEach((el) => {
     el.textContent = count;
     el.hidden = !count;
+  });
+  document.querySelectorAll('[data-action="cart"]').forEach((el) => {
+    el.setAttribute(
+      "aria-label",
+      count
+        ? c.t(`Kosár, ${count} termék`, `Bag, ${count} items`)
+        : c.t("Kosár, üres", "Bag, empty"),
+    );
   });
 }
 function saveCart() {
@@ -151,6 +176,7 @@ function showDialog(title, body) {
   if (!d.open) {
     d.showModal();
     document.documentElement.style.overflow = "hidden";
+    requestAnimationFrame(() => d.querySelector(".dialog-close")?.focus());
   }
   d.onclose = () => {
     document.documentElement.style.overflow = "";
@@ -190,6 +216,14 @@ function updateFilters() {
   const form = document.querySelector("#filters");
   state.filters = Object.fromEntries(new FormData(form));
   document.querySelector("#results").innerHTML = results(c, state.filters);
+  const activeCount = ["size", "mode", "price", "brand"].filter(
+    (key) => state.filters[key],
+  ).length;
+  const badge = form.querySelector(".filter-active-count");
+  if (badge) {
+    badge.textContent = activeCount;
+    badge.hidden = !activeCount;
+  }
   const params = new URLSearchParams(
     Object.entries(state.filters).filter(([, v]) => v),
   );
@@ -324,6 +358,25 @@ document.addEventListener("click", (event) => {
             `[data-action="${action}"][data-key="${button.dataset.key}"]`,
           )
           ?.focus();
+        break;
+      }
+      case "filter-toggle": {
+        const form = button.closest("#filters");
+        const open = form.dataset.open !== "true";
+        form.dataset.open = String(open);
+        button.setAttribute("aria-expanded", String(open));
+        if (open)
+          requestAnimationFrame(() =>
+            form.querySelector("#filter-controls select")?.focus(),
+          );
+        break;
+      }
+      case "remove-filter": {
+        const form = document.querySelector("#filters");
+        const control = form?.elements.namedItem(button.dataset.filter);
+        if (control) control.value = "";
+        updateFilters();
+        document.querySelector(".mobile-filter-toggle")?.focus();
         break;
       }
       case "clear-filters":
@@ -544,6 +597,10 @@ document.addEventListener("submit", (event) => {
     render({ focus: "#step-title" });
     document.querySelector(".stepper").scrollIntoView({ block: "start" });
   }
+});
+document.addEventListener("click", (event) => {
+  const dialog = event.target.closest("dialog");
+  if (dialog && event.target === dialog) closeDialog();
 });
 window.addEventListener("popstate", () => {
   loadRoute();

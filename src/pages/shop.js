@@ -15,8 +15,12 @@ import {
   productAsset,
   livingStory,
   brandGallery,
+  icon,
 } from "../components.js";
 export function filtersForm(c, f = {}) {
+  const activeCount = ["size", "mode", "price", "brand"].filter(
+    (key) => f[key],
+  ).length;
   const select = (name, label, opts) =>
     field(c, {
       name,
@@ -25,7 +29,7 @@ export function filtersForm(c, f = {}) {
       required: false,
       options: opts,
     });
-  return `<form id="filters" class="filters"><div class="filter-heading"><h2>${c.t("Szűrés", "Filters")}</h2><button class="text-button" type="reset">${c.t("Törlés", "Clear")}</button></div>${select(
+  return `<form id="filters" class="filters"><button class="mobile-filter-toggle" type="button" data-action="filter-toggle" aria-expanded="false" aria-controls="filter-controls">${icon("tune")}<span>${c.t("Szűrés és rendezés", "Filter and sort")}</span><b class="filter-active-count" ${activeCount ? "" : "hidden"}>${activeCount}</b><span class="filter-toggle-mark" aria-hidden="true">+</span></button><div id="filter-controls" class="filter-controls"><div class="filter-heading"><h2>${c.t("Szűrés", "Filters")}</h2><button class="text-button" type="reset">${c.t("Törlés", "Clear")}</button></div>${select(
     "size",
     c.t("Helyiségméret", "Room size"),
     [
@@ -46,11 +50,30 @@ export function filtersForm(c, f = {}) {
     "brand",
     c.t("Márka (opcionális)", "Brand (optional)"),
     [...new Set(products.map((p) => p.brand))].map((b) => [b, b]),
-  )}<div class="filter-help"><span class="eyebrow">${c.t("BIZONYTALAN VAGY?", "NOT SURE?")}</span><p>${c.t("Útmutató a választáshoz elég három válasz.", "Three answers are all it takes.")}</p><a class="text-link" href="${c.url("valaszto")}">${c.t("Segítünk választani", "Let us help")} ${arrow}</a></div><noscript><p>${c.t("A szűréshez kapcsold be a JavaScriptet. Az összes termék alább elérhető.", "Enable JavaScript to filter. All products are available below.")}</p></noscript></form>`;
+  )}<div class="filter-help"><span class="eyebrow">${c.t("BIZONYTALAN VAGY?", "NOT SURE?")}</span><p>${c.t("Útmutató a választáshoz elég három válasz.", "Three answers are all it takes.")}</p><a class="text-link" href="${c.url("valaszto")}">${c.t("Segítünk választani", "Let us help")} ${arrow}</a></div></div><noscript><p>${c.t("A szűréshez kapcsold be a JavaScriptet. Az összes termék alább elérhető.", "Enable JavaScript to filter. All products are available below.")}</p></noscript></form>`;
 }
 export function results(c, f = {}) {
   const list = filterProducts(f);
-  return `<div class="results-meta"><p role="status" aria-live="polite"><b>${list.length}</b> ${c.t("klíma a választásodhoz", "air conditioners for your selection")}</p><label>${c.t("Rendezés", "Sort")} <select name="sort" form="filters" aria-label="${c.t("Rendezés", "Sort")}">${[
+  const filterLabels = {
+    size:
+      ({ "15": "10–18 m²", "22": "18–25 m²", "30": "25–35 m²", "42": "35–50 m²" })[
+        f.size
+      ] || "",
+    mode: f.mode && c.t(...modes[f.mode]),
+    price:
+      f.price === "low"
+        ? c.t("250 000 Ft alatt", "Under 250,000 HUF")
+        : f.price === "mid"
+          ? c.t("250–400 ezer Ft", "250–400k HUF")
+          : f.price === "high"
+            ? c.t("400 000 Ft felett", "Over 400,000 HUF")
+            : "",
+    brand: f.brand || "",
+  };
+  const activeFilters = ["size", "mode", "price", "brand"].filter(
+    (key) => f[key],
+  );
+  return `${activeFilters.length ? `<div class="active-filters" aria-label="${c.t("Aktív szűrők", "Active filters")}">${activeFilters.map((key) => `<button type="button" data-action="remove-filter" data-filter="${key}" aria-label="${e(c.t("Szűrő törlése: ", "Remove filter: ") + filterLabels[key])}"><span>${e(filterLabels[key])}</span>${icon("close")}</button>`).join("")}<button class="clear-filter-chip" type="button" data-action="clear-filters">${c.t("Mind törlése", "Clear all")}</button></div>` : ""}<div class="results-meta"><p role="status" aria-live="polite"><b>${list.length}</b> ${c.t("klíma a választásodhoz", "air conditioners for your selection")}</p><label>${c.t("Rendezés", "Sort")} <select name="sort" form="filters" aria-label="${c.t("Rendezés", "Sort")}">${[
     ["recommended", c.t("Ajánlott sorrend", "Recommended")],
     ["price-up", c.t("Ár: növekvő", "Price: low to high")],
     ["price-down", c.t("Ár: csökkenő", "Price: high to low")],

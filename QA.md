@@ -37,6 +37,9 @@ Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokka
 - A karakteres CTA-nyilak és pipák helyett egységes SVG/CSS jelek jelennek meg.
 - A produkciós képernyőképek alapján javítva: megszűnt a fő tartalom kék fókuszkerete, a logó tiszta arculati-board kivágást használ, a klímakategória nyitóblokkja képes szerkesztői elrendezést kapott.
 - A fő és kategória hero-képek aszimmetrikus építészeti vágást, látható narancs sarokrészletet és visszafogott képátmenetet használnak.
+- Mobilon a katalógusszűrő alaphelyzetben összecsukott, az aktív szűrők száma és külön törölhető címkéi látszanak; a terméklista azonnal elérhető.
+- A kosárgomb felolvasott neve tartalmazza a darabszámot, a párbeszédablak nyitáskor fókuszt kap, bezáráskor pedig visszaadja azt a kiinduló vezérlőnek.
+- A teljes statikus kimeneten nincs hiányzó belső hivatkozás, duplikált HTML-azonosító vagy hibás lokális horgony; a 404 oldal nem hivatkozik nem létező nyelvi változatokra.
 - A vizsgált folyamatokban nem keletkezett JavaScript konzolhiba.
 
 A teszt nem minősül teljes WCAG-auditnak. Fizetés, szerveroldali fájlfeltöltés és valós ajánlatküldés nincs bekötve, ezért ilyen folyamat sikerességét nem állítjuk.

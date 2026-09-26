@@ -2338,3 +2338,110 @@ main:focus-visible {
     bottom: 21px;
   }
 }
+
+/* Compact catalogue controls and visible filter state. */
+.mobile-filter-toggle {
+  display: none;
+}
+.filter-controls {
+  display: contents;
+}
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.active-filters button {
+  min-height: 36px;
+  padding: 7px 10px 7px 13px;
+  border: 1px solid #cbd0d0;
+  border-radius: 999px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 600;
+}
+.active-filters button:hover {
+  border-color: var(--orange);
+  color: #b73b13;
+}
+.active-filters button svg {
+  width: 14px;
+  height: 14px;
+}
+.active-filters .clear-filter-chip {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 640px) {
+  .mobile-filter-toggle {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 54px;
+    border: 1px solid #c7cbca;
+    background: #fff;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+  }
+  .mobile-filter-toggle > svg {
+    width: 19px;
+    height: 19px;
+  }
+  .mobile-filter-toggle > span:nth-of-type(1) {
+    flex: 1;
+  }
+  .filter-active-count {
+    min-width: 22px;
+    height: 22px;
+    padding-inline: 6px;
+    border-radius: 999px;
+    background: var(--orange);
+    color: #fff;
+    display: inline-grid;
+    place-items: center;
+    font-size: 10px;
+  }
+  .filter-toggle-mark {
+    font-size: 21px;
+    line-height: 1;
+    font-weight: 400;
+    transition: transform 180ms ease;
+  }
+  .filters[data-open="true"] .filter-toggle-mark {
+    transform: rotate(45deg);
+  }
+  .filter-controls {
+    grid-column: 1 / -1;
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 12px;
+    padding: 16px 0 3px;
+  }
+  .filters[data-open="true"] .filter-controls {
+    display: grid;
+  }
+  .filter-controls .filter-heading {
+    grid-column: 1 / -1;
+  }
+  .active-filters {
+    margin: 2px 0 15px;
+    gap: 7px;
+  }
+  .active-filters button {
+    min-height: 34px;
+    font-size: 9px;
+  }
+}

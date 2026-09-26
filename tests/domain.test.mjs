@@ -113,6 +113,9 @@ test("empty device request renders safely and unknown product is a 404", () => {
   q.units = [];
   assert.doesNotThrow(() => renderPage("hu", "keszulekigeny", { quote: q }));
   assert.equal(renderPage("hu", "klimak/missing").notFound, true);
+  const notFound = documentHTML("hu", "404");
+  assert.match(notFound, /rel="canonical" href="https:\/\/thermova.hu\/404.html"/);
+  assert.ok(!notFound.includes('rel="alternate"'));
 });
 test("untrusted form values are escaped, files remain optional and completion is honest", () => {
   const q = newQuote();
