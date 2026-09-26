@@ -62,7 +62,7 @@ A frontend nem állítja, hogy sikeres rendelés vagy üzenetküldés történt:
 
 A kapott Aeris, Nordiq, Valtek és Sensa modellek, specifikációk és készülékárak mintaadatok. A képek arculati látványtervek. Élesítés előtt a valódi katalógust, gyártói képeket, cégadatokat, adatkezelési tájékoztatót, kereskedelmi feltételeket és a tényleges integrációt szükséges megadni. Ezeket nem találtuk ki.
 
-Az oldalak statikusan olvashatók, saját címmel, meta leírással és HU/EN alternatív hivatkozásokkal. A mintakatalógus miatt a bemutató tudatosan `noindex` és robots-tiltást használ. Élesítéskor ezt a hiteles katalógussal és végleges domainnel együtt kell átállítani; ekkor készíthető végleges canonical, sitemap és valós Product/Offer strukturált adat.
+Az oldalak statikusan olvashatók, saját címmel, meta leírással, canonical címmel és HU/EN alternatív hivatkozásokkal. A céges és szolgáltatási oldalak indexelhetők, a minta termékoldalak és űrlapok `noindex,follow` jelölést kapnak. A build sitemapet is készít. A termékkatalógus csak hiteles termékadatok beállítása után tehető indexelhetővé és egészíthető ki valós Product/Offer strukturált adatokkal.
 
 A kosár helyi tárolóban marad. Kapcsolati adat és feltöltött fájl nem kerül tartós tárolásba; újratöltéskor az ajánlatkérési vázlat törlődik. Nincs analitika vagy külső betűszolgáltatás.
 

@@ -9,7 +9,7 @@ import {
 } from "./pages/shop.js";
 import { selector, quotePage } from "./pages/forms.js";
 import { information } from "./pages/information.js";
-import { newQuote, product, system } from "./domain.js";
+import { config, newQuote, product, system } from "./domain.js";
 export function parseRoute(pathname) {
   const parts = pathname.split("/").filter(Boolean);
   const lang = parts[0] === "en" ? "en" : "hu";
@@ -90,5 +90,17 @@ export function renderPage(lang, path = "", state = {}) {
 }
 export function documentHTML(lang, path, state = {}) {
   const page = renderPage(lang, path, state);
-  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#F4F4F2"><title>${e(page.title)}</title><meta name="description" content="${e(page.description)}"><meta name="robots" content="noindex,nofollow"><meta property="og:title" content="${e(page.title)}"><meta property="og:description" content="${e(page.description)}"><meta property="og:type" content="website"><link rel="alternate" hreflang="hu" href="/hu/${path ? path + "/" : ""}"><link rel="alternate" hreflang="en" href="/en/${path ? path + "/" : ""}"><link rel="icon" href="/assets/mark.svg" type="image/svg+xml"><link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/brand.css">${!path ? '<link rel="preload" as="image" href="/assets/architecture.webp">' : ""}<script type="module" src="/src/app.js"></script></head><body>${page.body}<noscript><p class="noscript">${lang === "hu" ? "Az ajánlatkéréshez és a kosárhoz JavaScript szükséges. A termékoldalak továbbra is olvashatók." : "Quote requests and the bag require JavaScript. Product pages remain readable."}</p></noscript></body></html>`;
+  const origin = config.siteOrigin || "https://thermova.hu";
+  const route = path ? `${path}/` : "";
+  const canonical = `${origin}/${lang}/${route}`;
+  const indexable = [
+    "",
+    "telepites",
+    "szolgaltatasok",
+    "rolunk",
+    "tudastar",
+    "kapcsolat",
+  ].includes(path);
+  const robots = !page.notFound && indexable ? "index,follow" : "noindex,follow";
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><title>${e(page.title)}</title><meta name="description" content="${e(page.description)}"><meta name="robots" content="${robots}"><link rel="canonical" href="${canonical}"><meta property="og:title" content="${e(page.title)}"><meta property="og:description" content="${e(page.description)}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${origin}/assets/architecture.webp"><link rel="alternate" hreflang="hu" href="${origin}/hu/${route}"><link rel="alternate" hreflang="en" href="${origin}/en/${route}"><link rel="alternate" hreflang="x-default" href="${origin}/hu/${route}"><link rel="icon" href="/assets/mark.svg" type="image/svg+xml"><link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/brand.css">${!path ? '<link rel="preload" as="image" href="/assets/architecture.webp">' : ""}<script type="module" src="/src/app.js"></script></head><body>${page.body}<noscript><p class="noscript">${lang === "hu" ? "Az ajánlatkéréshez és a kosárhoz JavaScript szükséges. A termékoldalak továbbra is olvashatók." : "Quote requests and the bag require JavaScript. Product pages remain readable."}</p></noscript></body></html>`;
 }

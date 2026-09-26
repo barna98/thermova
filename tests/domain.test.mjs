@@ -71,6 +71,25 @@ test("cart storage rejects unknown products and invalid quantities", () => {
     [{ id: "aeris-26", qty: 2, installation: false }],
   );
 });
+test("cart storage consolidates duplicate variants without exceeding the limit", () => {
+  assert.deepEqual(
+    safeCart([
+      { id: "nordiq-35", qty: 12, installation: true },
+      { id: "nordiq-35", qty: 12, installation: true },
+      { id: "nordiq-35", qty: 2, installation: false },
+    ]),
+    [
+      { id: "nordiq-35", qty: 20, installation: true },
+      { id: "nordiq-35", qty: 2, installation: false },
+    ],
+  );
+});
+test("a single device-only request does not require installation review", () => {
+  const request = newQuote("device", "nordiq-35");
+  assert.equal(reviewRequired(request), false);
+  request.units.push(newUnit("aeris-26"));
+  assert.equal(reviewRequired(request), true);
+});
 test("all public pages are rendered in both languages with exactly one h1", () => {
   for (const lang of ["hu", "en"])
     for (const path of routes) {
@@ -83,6 +102,10 @@ test("all public pages are rendered in both languages with exactly one h1", () =
       );
       assert.ok(!page.body.includes("undefined"), lang + "/" + path);
       assert.ok(documentHTML(lang, path).includes(`lang="${lang}"`));
+      assert.match(
+        documentHTML(lang, path),
+        /name="robots" content="(noindex,follow|index,follow)"/,
+      );
     }
 });
 test("empty device request renders safely and unknown product is a 404", () => {

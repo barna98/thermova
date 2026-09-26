@@ -2,13 +2,15 @@
 
 ## Automatizált ellenőrzés
 
-`npm test`: 10/10 sikeres teszt.
+`npm test`: 12/12 sikeres teszt.
 
 - Standard telepítés 109 000 Ft; több készülék összegei helyesek.
 - Összetett szűrés: méret, használat, ár, márka.
 - Numerikus rendezés; nincs a megadott feltételeket megsértő ajánlás.
 - Több klíma és minden hőszivattyú esetén emberi ellenőrzés.
 - Hibás kosáradatok kizárása, régi kosáradatok biztonságos migrációja.
+- Duplikált kosárváltozatok összevonása, legfeljebb 20 darabig.
+- Egyetlen, szerelés nélküli készülékigény nem kap téves telepítési felülvizsgálatot.
 - Minden magyar és angol útvonal renderelhető, pontosan egy h1 címsorral.
 - Nem létező termék: 404. Üres kosárból nyitott készülékigény nem okoz renderelési hibát.
 - Felhasználói szöveg és fájlnév HTML-escape; fájlmező opcionális.
@@ -31,6 +33,8 @@ Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokka
 - Mobil termékoldal: a változatváltást követi a rögzített kosárgomb felirata és ára.
 - Főoldal, angol klímakategória, klímatermékoldal és hőszivattyús ajánlatkérés: 320, 768 és 1440 px szélességen nincs vízszintes túlcsordulás.
 - Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; arculati fotók betöltése és képkivágása.
+- 390 px mobilmenü: panelanimáció, sorszámozott navigáció, stabil kör alakú bezárógomb és fókusz-visszaadás.
+- A karakteres CTA-nyilak és pipák helyett egységes SVG/CSS jelek jelennek meg.
 - A vizsgált folyamatokban nem keletkezett JavaScript konzolhiba.
 
 A teszt nem minősül teljes WCAG-auditnak. Fizetés, szerveroldali fájlfeltöltés és valós ajánlatküldés nincs bekötve, ezért ilyen folyamat sikerességét nem állítjuk.

@@ -18,7 +18,7 @@ export function home(c) {
    <p class="eyebrow"><span class="orange-line"></span>${c.t("OTTHONOKNAK ÉS VÁLLALKOZÁSOKNAK", "FOR HOMES AND BUSINESSES")}</p>
    <h1>${c.t("Klíma és<br>hőszivattyú,<br><span>telepítéssel is.</span>", "Air conditioning<br>and heat pumps.<br><span>Installation too.</span>")}</h1>
    <p class="hero-lead">${c.t("Segítünk a választásban, és a telepítést is vállaljuk. Lakásba, családi házba, irodába vagy üzlethelyiségbe.", "We help you choose and can handle installation too. For flats, houses, offices and shops.")}</p>
-   <div class="hero-actions"><a class="button" href="${c.url("klimak")}">${c.t("Klímát választok", "Find my air conditioner")} ${arrow}</a><a class="text-link" href="${c.url("valaszto")}">${c.t("Segítsetek dönteni", "Help me choose")} <span aria-hidden="true">→</span></a></div>
+   <div class="hero-actions"><a class="button" href="${c.url("klimak")}">${c.t("Klímát választok", "Find my air conditioner")} ${arrow}</a><a class="text-link" href="${c.url("valaszto")}">${c.t("Segítsetek dönteni", "Help me choose")} ${arrow}</a></div>
    <div class="hero-foot"><span>${c.t("Készülékek szereléssel vagy anélkül", "Units with or without installation")}</span></div>
   </div>
   <div class="hero-image">${image("architecture", c.t("Modern otthon, meleg belső fényekkel – építészeti látványkép", "Modern home with warm interior light — architectural concept"), { hero: true })}<div class="image-label"><span>THERMOVA LIVING</span><span>${c.t("Fűtés és hűtés az épülethez igazítva.", "Heating and cooling to suit the building.")} ${arrow}</span></div></div>

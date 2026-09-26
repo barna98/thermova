@@ -147,7 +147,7 @@ function showToast(text) {
 function showDialog(title, body) {
   const d = document.querySelector("#overlay");
   if (!d.open) lastFocus = document.activeElement;
-  d.innerHTML = `<div class="dialog-heading"><h2 id="dialog-title">${title}</h2><button class="icon-btn" data-action="close-dialog" aria-label="${c.t("Bezárás", "Close")}">${icon("close")}</button></div>${body}`;
+  d.innerHTML = `<div class="dialog-heading"><h2 id="dialog-title">${title}</h2><button class="dialog-close" data-action="close-dialog" aria-label="${c.t("Bezárás", "Close")}">${icon("close")}</button></div>${body}`;
   if (!d.open) {
     d.showModal();
     document.documentElement.style.overflow = "hidden";
@@ -269,8 +269,8 @@ document.addEventListener("click", (event) => {
     switch (action) {
       case "menu":
         showDialog(
-          c.t("Menü", "Menu"),
-          `<nav class="menu-links">${[
+          `<span class="menu-kicker">THERMOVA</span><br>${c.t("Menü", "Menu")}`,
+          `<div class="menu-intro">${c.t("Klíma és hőszivattyú otthonra és cégeknek.", "Air conditioning and heat pumps for homes and businesses.")}</div><nav class="menu-links">${[
             ["klimak", "Klímák", "Air conditioners"],
             ["hoszivattyuk", "Hőszivattyúk", "Heat pumps"],
             ["szolgaltatasok", "Szolgáltatások", "Services"],
@@ -279,8 +279,8 @@ document.addEventListener("click", (event) => {
             ["kapcsolat", "Kapcsolat", "Contact"],
             ["ajanlat", "Ajánlatot kérek", "Get a quote"],
           ]
-            .map(([u, hu, en]) => `<a href="${c.url(u)}">${c.t(hu, en)}</a>`)
-            .join("")}</nav>`,
+            .map(([u, hu, en], i) => `<a href="${c.url(u)}"><span>0${i + 1}</span><strong>${c.t(hu, en)}</strong>${arrow}</a>`)
+            .join("")}</nav><div class="menu-meta"><a href="${c.url("telepites")}">${c.t("Standard telepítés", "Standard installation")} · ${c.money(config.installationPrice)}</a><span>HU / EN</span></div>`,
         );
         break;
       case "close-dialog":

@@ -44,7 +44,25 @@ export async function build() {
   await fs.writeFile(path.join(out, "404.html"), documentHTML("hu", "404"));
   await fs.writeFile(
     path.join(out, "robots.txt"),
-    "User-agent: *\nDisallow: /\n",
+    "User-agent: *\nAllow: /\nSitemap: https://thermova.hu/sitemap.xml\n",
+  );
+  const publicRoutes = [
+    "",
+    "telepites",
+    "szolgaltatasok",
+    "rolunk",
+    "tudastar",
+    "kapcsolat",
+  ];
+  const sitemapUrls = ["hu", "en"].flatMap((lang) =>
+    publicRoutes.map(
+      (route) =>
+        `<url><loc>https://thermova.hu/${lang}/${route ? route + "/" : ""}</loc></url>`,
+    ),
+  );
+  await fs.writeFile(
+    path.join(out, "sitemap.xml"),
+    `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${sitemapUrls.join("")}</urlset>`,
   );
   console.log(`Built ${routes.length * 2 + 1} static pages in dist/.`);
 }

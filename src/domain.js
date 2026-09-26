@@ -3,7 +3,7 @@ export const config = Object.freeze({
   installationPrice: 109000,
   catalogueIsSample: true,
   quoteEndpoint: null,
-  siteOrigin: null,
+  siteOrigin: "https://thermova.hu",
 });
 export const product = (id) => products.find((p) => p.id === id);
 export const system = (id) => heatpumps.find((p) => p.id === id);
@@ -67,6 +67,7 @@ export const cartKey = (item) =>
 export function reviewRequired(q) {
   const count =
     q.units.length + (q.deviceOnly || []).reduce((n, item) => n + item.qty, 0);
+  if (q.kind === "device") return count >= 2;
   return (
     q.kind === "hp" ||
     count >= 2 ||
@@ -112,21 +113,29 @@ export const newQuote = (kind = "ac", pid) => ({
   complete: false,
 });
 export function safeCart(value) {
-  return Array.isArray(value)
-    ? value
-        .filter(
-          (x) =>
-            product(x.id) &&
-            Number.isInteger(x.qty) &&
-            x.qty > 0 &&
-            x.qty <= 20,
-        )
-        .map((x) => ({
-          id: x.id,
-          qty: x.qty,
-          installation: x.installation === true,
-        }))
-    : [];
+  if (!Array.isArray(value)) return [];
+  const unique = new Map();
+  value
+    .filter(
+      (x) =>
+        product(x.id) &&
+        Number.isInteger(x.qty) &&
+        x.qty > 0 &&
+        x.qty <= 20,
+    )
+    .forEach((x) => {
+      const item = {
+        id: x.id,
+        qty: x.qty,
+        installation: x.installation === true,
+      };
+      const key = cartKey(item);
+      unique.set(key, {
+        ...item,
+        qty: Math.min(20, (unique.get(key)?.qty || 0) + item.qty),
+      });
+    });
+  return [...unique.values()];
 }
 export const installationItems = [
   [
