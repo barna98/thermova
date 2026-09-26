@@ -1,6 +1,6 @@
 # Képi anyag és márkaazonosság
 
-A korábbi képernyőfotó-alapú logó archivált forrásként megmaradt `public/assets/thermova-original-logo.png` néven. A felületen használt, tisztább `public/assets/thermova-wordmark.png` közvetlenül a felhasználó által átadott arculati board nagy logójából készült pontos kivágással, további átrajzolás nélkül. A végleges vektoros SVG/PDF logó később ugyanide illeszthető.
+A korábbi képernyőfotó-alapú logó archivált forrásként megmaradt `public/assets/thermova-original-logo.png` néven. A felületen használt `public/assets/thermova-wordmark-transparent.png` közvetlenül a felhasználó által átadott arculati board nagy logójából készült, valódi átlátszó háttérrel. A végleges vektoros SVG/PDF logó később ugyanide illeszthető.
 
 Az arculati board változatlan referencia: `public/assets/thermova-brand-board.png`.
 

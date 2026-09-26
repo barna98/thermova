@@ -5,7 +5,7 @@ export const arrow =
 export const icon = (type) =>
   `<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${{ bag: '<path d="M5 7h14l1 14H4L5 7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/>', search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>', menu: '<path d="M5 7h14M5 12h14M5 17h14"/>', tune: '<path d="M4 7h10m4 0h2M4 17h2m4 0h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>', check: '<path d="m5 12 4 4L19 6"/>', close: '<path d="m7 7 10 10M17 7 7 17"/>', back: '<path d="m14.5 5-7 7 7 7"/>', forward: '<path d="m9.5 5 7 7-7 7"/>', download: '<path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/>', sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/>' }[type] || ""}</svg>`;
 export function logo(c) {
-  return `<a class="logo" href="${c.url()}" aria-label="THERMOVA ${c.t("főoldal", "home")}"><span class="original-wordmark"><img src="/assets/thermova-wordmark.png" width="700" height="100" alt="THERMOVA" decoding="async"></span><span class="tagline">${c.t("ÉPÜLETENERGETIKAI MEGOLDÁSOK", "BUILDING ENERGY SOLUTIONS")}</span></a>`;
+  return `<a class="logo" href="${c.url()}" aria-label="THERMOVA ${c.t("főoldal", "home")}"><span class="original-wordmark"><img src="/assets/thermova-wordmark-transparent.png" width="700" height="100" alt="THERMOVA" decoding="async"></span><span class="tagline">${c.t("ÉPÜLETENERGETIKAI MEGOLDÁSOK", "BUILDING ENERGY SOLUTIONS")}</span></a>`;
 }
 export const productAsset = (p) =>
   p?.tier === "premium" ? "climate-graphite" : "climate";

@@ -2166,7 +2166,7 @@ main:focus-visible {
 .original-wordmark {
   aspect-ratio: 7;
   overflow: hidden;
-  background: #fff;
+  background: transparent;
 }
 .original-wordmark img {
   width: 100%;
