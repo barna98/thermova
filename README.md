@@ -1,6 +1,6 @@
 # THERMOVA — frontend
 
-Átdolgozott, kétnyelvű frontend a feltöltött prototípus és a THERMOVA brand board alapján. A legújabb változat eredeti logóképet, bővített arculati fotóanyagot és **alapszereléssel / szerelés nélkül** kosárba tehető klímákat tartalmaz.
+Átdolgozott, kétnyelvű frontend a feltöltött prototípus és a THERMOVA brand board alapján. A legújabb változat eredeti logóképet, egységesen megjelenített valódi termékfotókat és **alapszereléssel / szerelés nélkül** kosárba tehető klímákat tartalmaz.
 
 ## Indítás
 
@@ -23,7 +23,7 @@ A `dist/` a statikus tárhelyre feltölthető kimenet. A mappát HTTP-kiszolgál
 
 - Világos, Manrope-alapú arculat, az eredeti THERMOVA-logóval. A feltöltött logófájlt használjuk, nem újragépelt betűket. A logó körüli üres margót CSS maszkolja, a fájl változatlan.
 - Helyben kiszolgált latin és latin-ext Manrope WOFF2; a magyar ékezetek is támogatottak.
-- Optimalizált WebP-képek két felbontásban: épület, enteriőr, szervizautó, munkaruházat, két klímaváltozat, hőszivattyúrendszer.
+- Optimalizált arculati WebP-képek, valamint modellenként ellenőrizhető forrásból származó, eredeti termékfotók. A termékfotók egységes, világos képfelületen jelennek meg, a forrásjegyzék a `product-image-sources.json` fájlban található.
 - Magyar és angol tartalom külön URL-eken. A nyelvváltás megtartja az adott oldalt, a szűrőket és a memóriában lévő ajánlatkérési adatokat.
 - Előre renderelt termék- és tartalmi oldalak: 62 lokalizált oldal és magyar gyökéroldal, külön 404 oldallal.
 - Klímakategória méret-, használat-, ár- és márkaszűrőkkel; rendezés és keresés.
@@ -31,7 +31,7 @@ A `dist/` a statikus tárhelyre feltölthető kimenet. A mappát HTTP-kiszolgál
 - Klímatermékoldal, árak, választási szempontok, standard telepítés teljes tartalma, lenyitható specifikáció és legfeljebb három alternatíva.
 - Valódi kosárállapot mennyiségekkel és törléssel. Ugyanaz a modell két külön változatként szerepelhet: **csak készülék** vagy **alapszereléssel**. Telepítési díj kizárólag a kért darabokra kerül rá. Mobilon a rögzített kosárgomb is a kiválasztott változatot követi.
 - A csak készülékből álló kosár kapcsolati adatokhoz vezet; a telepítést is tartalmazó kosár helyszíni kérdéseket kér. Vegyes kosárban a szerelés nélküli készülékek megmaradnak az összegzésben.
-- Négylépéses klímás és hőszivattyús ajánlatkérés. Fotó/dokumentum opcionális, fájltípus-, méret- és darabszám-ellenőrzéssel. Visszalépéskor a kitöltött adatok megmaradnak.
+- Rövid, egyoldalas visszahíváskérő klímához és hőszivattyúhoz. A helyiségek száma és területe opcionális; a részletes műszaki felmérés telefonos egyeztetéskor történik.
 - Két vagy több klímánál, illetve minden hőszivattyús projektnél emberi műszaki ellenőrzés jelzése.
 - Billentyűzettel kezelhető vezérlők, szemantikus címsorok, címkézett mezők, natív dialógus, fókuszvisszaadás, csökkentett animációs beállítás támogatása.
 
@@ -43,7 +43,7 @@ Megtartottuk a termékadatok kiinduló szerkezetét, a klíma/rendszer különv�
 
 ## Szerkezet
 
-- `src/catalogue.js` — a kapott mintakatalógus, 12 klíma és 6 rendszer.
+- `src/catalogue.js` — a megadott, 20 klímából álló katalógus és a hőszivattyúrendszerek.
 - `src/domain.js` — üzleti paraméterek, szűrés, ajánlás, kosár- és ajánlatösszegek, ellenőrzési feltételek.
 - `src/i18n.js` — nyelvi kontextus, URL-képzés, pénznemformázás, biztonságos szövegkiírás.
 - `src/components.js` — közös fejléc, logó, lábléc, termékkártyák, képek, űrlapmezők és arculati szekciók.
@@ -58,9 +58,9 @@ Megtartottuk a termékadatok kiinduló szerkezetét, a klíma/rendszer különv�
 
 ## Mi szükséges az éles működéshez?
 
-A frontend nem állítja, hogy sikeres rendelés vagy üzenetküldés történt: jelenleg letölthető JSON-összefoglalót készít. Nincs fizetés, rendeléskezelő backend, készletkapcsolat vagy levélküldés. A fájlokat csak a böngésző memóriájában tartja; a JSON a fájlneveket és metaadatokat tartalmazza, a fájlokat nem.
+A frontend nem állítja, hogy sikeres rendelés vagy üzenetküldés történt: alapbeállításban ellenőrizhető, letölthető JSON-összefoglalót készít. A `config.quoteEndpoint` megadásával JSON-alapú fogadó végponthoz köthető. Nincs fizetés, rendeléskezelő backend vagy készletkapcsolat.
 
-A kapott Aeris, Nordiq, Valtek és Sensa modellek, specifikációk és készülékárak mintaadatok. A képek arculati látványtervek. Élesítés előtt a valódi katalógust, gyártói képeket, cégadatokat, adatkezelési tájékoztatót, kereskedelmi feltételeket és a tényleges integrációt szükséges megadni. Ezeket nem találtuk ki.
+A klímakatalógus a megadott valós modelleket és külön dokumentált termékfotó-forrásokat használja. Az online árak tájékoztató jellegűek; élesítés előtt a készletet, a Thermova tényleges eladási árait, a cégadatokat, az adatkezelési tájékoztatót, a kereskedelmi feltételeket és a fogadó integrációt szükséges véglegesíteni.
 
 Az oldalak statikusan olvashatók, saját címmel, meta leírással, canonical címmel és HU/EN alternatív hivatkozásokkal. A céges és szolgáltatási oldalak indexelhetők, a minta termékoldalak és űrlapok `noindex,follow` jelölést kapnak. A build sitemapet is készít. A termékkatalógus csak hiteles termékadatok beállítása után tehető indexelhetővé és egészíthető ki valós Product/Offer strukturált adatokkal.
 

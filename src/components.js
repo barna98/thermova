@@ -1,3 +1,4 @@
+import { productImages } from "./product-images.js";
 import { escape as e } from "./i18n.js";
 import { config, installationItems } from "./domain.js";
 export const arrow =
@@ -34,6 +35,8 @@ export function image(
   alt,
   { small = false, hero = false, cls = "" } = {},
 ) {
+  const original = name.startsWith("products/") && productImages[name.slice(9)];
+  if (original) return `<img class="product-photo ${cls}" src="${original.src}" width="${original.width}" height="${original.height}" alt="${e(alt)}" ${hero ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
   return `<img class="${cls}" src="/assets/${name}${small ? "-small" : ""}.webp" ${!small ? `srcset="/assets/${name}-small.webp 640w, /assets/${name}.webp 1440w" sizes="${hero ? "(max-width: 760px) 100vw, 60vw" : "(max-width: 760px) 100vw, 50vw"}"` : ""} width="1536" height="1024" alt="${e(alt)}" ${hero ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
 }
 export const sectionHead = (c, kicker, title, link) =>
@@ -60,11 +63,19 @@ export function productText(c, p) {
             : "For summer cooling and supplementary heating between seasons.",
   );
 }
+export function productBadge(c, p) {
+  if (p.mode === "heat") return c.t("Fűtésre ajánljuk", "Recommended for heating");
+  if (p.price < 180000) return c.t("Kedvező ár", "Affordable choice");
+  if (p.badge === "rec") return c.t("Thermova ajánlja", "Thermova recommends");
+  if (p.tier === "premium") return c.t("Prémium választás", "Premium choice");
+  if (p.db <= 20) return c.t("Halk működés", "Quiet operation");
+  return c.t("Hűtés és ráfűtés", "Cooling & extra heating");
+}
 export function productCard(c, p) {
-  return `<article class="product-card"><a class="product-visual" href="${c.url("klimak/" + p.id)}" tabindex="-1" aria-hidden="true"><span class="product-badge">${p.mode === "heat" ? c.t("Elsősorban fűtésre", "Designed for heating") : p.tier === "premium" ? c.t("Prémium kategória", "Premium range") : c.t("Hűtéshez és ráfűtéshez", "Cooling and supplementary heating")}</span>${image(productAsset(p), "", { small: true })}<span class="visual-caption">${c.t("Egységesített termékfotó", "Standardised product image")}</span></a><div class="product-info"><div class="product-meta"><span>${e(p.brand)}</span><span>${p.room.join("–")} m²</span></div><h3><a href="${c.url("klimak/" + p.id)}">${e(p.name)}</a><span>${String(p.kw).replace(".", c.lang === "hu" ? "," : ".")} kW</span></h3><p>${productText(c, p)}</p><div class="prices"><div><span>${c.t("Készülékár", "Unit price")}</span><b>${c.money(p.price)}</b></div><div class="installed-price"><span>${c.t("Telepítéssel", "With installation")}</span><strong>${c.money(p.price + config.installationPrice)}</strong></div></div><a class="product-link" href="${c.url("klimak/" + p.id)}">${c.t("Megnézem", "View product")} ${arrow}</a></div></article>`;
+  return `<article class="product-card"><a class="product-visual" href="${c.url("klimak/" + p.id)}" tabindex="-1" aria-hidden="true"><span class="product-badge">${productBadge(c, p)}</span>${image(productAsset(p), "", { small: true })}</a><div class="product-info"><div class="product-meta"><span>${e(p.brand)}</span><span>${p.room.join("–")} m²</span></div><h3><a href="${c.url("klimak/" + p.id)}">${e(p.name)}</a><span>${String(p.kw).replace(".", c.lang === "hu" ? "," : ".")} kW</span></h3><p>${productText(c, p)}</p><div class="prices"><div><span>${c.t("Készülékár", "Unit price")}</span><b>${c.money(p.price)}</b></div><div class="installed-price"><span>${c.t("Telepítéssel", "With installation")}</span><strong>${c.money(p.price + config.installationPrice)}</strong></div></div><a class="product-link" href="${c.url("klimak/" + p.id)}">${c.t("Megnézem", "View product")} ${arrow}</a></div></article>`;
 }
 export function sampleNotice(c) {
-  return `<p class="sample-note">${c.t("A klímák tájékoztató online készülékárai 2026. 09. 26-án lettek ellenőrizve; a hőszivattyúk rendszerárai irányárak. A végleges Thermova ár és elérhetőség visszaigazolás után érvényes. A termékfotókat egységes megjelenésre szerkesztettük; a méretarány modellenként eltérhet.", "Air conditioner reference prices were checked online on 26 September 2026; heat-pump system prices are indicative. Final Thermova pricing and availability are subject to confirmation. Product photos have been standardised visually; scale may vary by model.")}</p>`;
+  return `<p class="sample-note">${c.t("A klímák tájékoztató online készülékárai 2026. 09. 26-án lettek ellenőrizve; a hőszivattyúk rendszerárai irányárak. A végleges Thermova ár és elérhetőség visszaigazolás után érvényes.", "Air conditioner reference prices were checked online on 26 September 2026; heat-pump system prices are indicative. Final Thermova pricing and availability are subject to confirmation.")}</p>`;
 }
 export function installBlock(c, full = false) {
   return `<section class="installation ${full ? "installation-full" : ""}" id="installation"><div><p class="eyebrow">${c.t("KLÍMATELEPÍTÉS", "AC INSTALLATION")}</p><h2>${c.t("Mit tartalmaz<br>az alapszerelés?", "What does standard<br>installation include?")}</h2><p>${c.t("Az alapszerelés díja készülékenként 109 000 Ft bruttó. Az alábbi munkákat és anyagokat tartalmazza.", "Standard installation costs 109,000 HUF per unit, including VAT. The following work and materials are included.")}</p><div class="installation-price"><strong>${c.money(config.installationPrice)}</strong><span>${c.t("bruttó / készülék", "incl. VAT / unit")}</span></div><p class="small">${c.t("A kábelcsatornázás külön tétel. Az egyedi helyszíni igényeket külön egyeztetjük.", "Cable trunking is charged separately. Site-specific work is agreed individually.")}</p>${!full ? `<a class="text-link" href="${c.url("telepites")}">${c.t("A telepítés részletei", "Installation details")} ${arrow}</a>` : ""}</div><div><h3>${c.t("A standard telepítés tartalma", "Included in standard installation")}</h3><ul class="check-list">${(full ? installationItems : installationItems.slice(0, 6)).map((pair) => `<li>${icon("check")}<span>${c.t(...pair)}</span></li>`).join("")}</ul>${!full ? `<p class="small">${c.t("Továbbá: vákuumozás, beüzemelés, dokumentáció és takarítás.", "Also includes evacuation, commissioning, documentation and clean-up.")}</p>` : ""}</div></section>`;

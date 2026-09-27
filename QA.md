@@ -2,7 +2,7 @@
 
 ## Automatizált ellenőrzés
 
-`npm test`: 12/12 sikeres teszt.
+`npm test`: 15/15 sikeres teszt.
 
 - Standard telepítés 109 000 Ft; több készülék összegei helyesek.
 - Összetett szűrés: méret, használat, ár, márka.
@@ -17,7 +17,7 @@
 - Vegyes kosár: csak a telepítést kérő változatokhoz számolunk szerelési díjat.
 - Vegyes ajánlatban megmaradnak a szerelés nélküli készülékek; 2+ készüléknél emberi ellenőrzés szükséges.
 
-`npm run build`: 63 statikus tartalmi oldal és egy 404 oldal létrejön.
+`npm run build`: 79 statikus oldal létrejön.
 
 ## Böngészős ellenőrzés
 
@@ -27,12 +27,12 @@ Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokka
 - Szerelés nélkül kiválasztott Comfort 35: 329 900 Ft; a kosárban 0 Ft szerelés.
 - Ugyanaz a Comfort 35 szereléssel és anélkül: két külön kosársor, 659 800 Ft készülék + 109 000 Ft szerelés = 768 800 Ft.
 - Vegyes kosár továbbadása: egy szerelendő helyiség, egy további szerelés nélküli készülék; az összeg változatlan.
-- Klímás ajánlatkérés mind a négy lépése: lakás, emelet, erkély; kültéri hely, munkamagasság, megközelíthetőség; fotó nélkül továbblépés; tesztkapcsolat; előkészített, nem elküldött összefoglaló.
-- Hőszivattyús folyamat: új építés, terület, padlófűtés, nincs meglévő hőtermelő; funkcióválasztás hiányában valódi hibaüzenet; dokumentum nélkül továbblépés.
-- HU → EN váltás az ajánlatkérés harmadik lépésén: a lépés és a választások megmaradnak.
+- Az egyoldalas visszahíváskérőn a klíma/hőszivattyú választás, az opcionális helyiségszám és terület, valamint a kötelező kapcsolati adatok működnek.
+- Bekötött fogadó végpont nélkül az összefoglaló egyértelműen jelzi, hogy nem történt adatküldés vagy visszahíváskérés.
+- A lead-adatcsomag nem tartalmaz automatikus árat vagy nem választott alapértelmezett készüléket; két vagy több klímánál és minden hőszivattyúnál emberi ellenőrzést kér.
 - Mobil termékoldal: a változatváltást követi a rögzített kosárgomb felirata és ára.
 - Főoldal, angol klímakategória, klímatermékoldal és hőszivattyús ajánlatkérés: 320, 768 és 1440 px szélességen nincs vízszintes túlcsordulás.
-- Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; arculati fotók betöltése és képkivágása.
+- Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; eredeti termékfotók egységes világos felületen, narancssárga ajánlási címkékkel és felirat nélkül.
 - 390 px mobilmenü: panelanimáció, sorszámozott navigáció, stabil kör alakú bezárógomb és fókusz-visszaadás.
 - A karakteres CTA-nyilak és pipák helyett egységes SVG/CSS jelek jelennek meg.
 - A produkciós képernyőképek alapján javítva: megszűnt a fő tartalom kék fókuszkerete, a logó tiszta arculati-board kivágást használ, a klímakategória nyitóblokkja képes szerkesztői elrendezést kapott.

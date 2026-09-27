@@ -91,6 +91,9 @@ export const newUnit = (pid = "gree-pulse-pro-35") => ({
 });
 export const newQuote = (kind = "ac", pid) => ({
   kind,
+  interest: kind === "hp" ? "hp" : "ac",
+  roomCount: "",
+  sent: false,
   step: 1,
   units: [newUnit(pid)],
   deviceOnly: [],
@@ -168,3 +171,13 @@ export const installationItems = [
   ["Beüzemelés és próbaüzem", "Commissioning and test operation"],
   ["Dokumentáció és takarítás", "Documentation and clean-up"],
 ];
+
+export function leadPayload(q, lang) {
+  const hasSelection = Boolean(q.seed || q.cartSignature || q.kind === "device");
+  return {
+    schemaVersion: 2, locale: lang, interest: q.interest,
+    contact: { ...q.contact }, roomCount: q.roomCount, area: q.area, note: q.note,
+    selection: hasSelection ? { kind: q.kind, units: q.kind === "hp" ? [] : q.units, deviceOnly: q.deviceOnly, system: q.kind === "hp" ? q.system : null } : null,
+    humanTechnicalReviewRequired: q.interest === "hp" || Number(q.roomCount) >= 2 || (hasSelection && reviewRequired(q)),
+  };
+}

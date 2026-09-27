@@ -8,6 +8,8 @@ if (production) await build();
 const mime = {
   ".css": "text/css",
   ".js": "text/javascript",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
   ".webp": "image/webp",
   ".svg": "image/svg+xml",
   ".woff2": "font/woff2",
