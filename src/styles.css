@@ -1044,6 +1044,12 @@ footer {
 .detail-prices {
   margin-bottom: 24px;
 }
+.product-sku {
+  margin: -10px 0 18px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
 .detail-prices > div {
   display: flex;
   justify-content: space-between;

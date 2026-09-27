@@ -30,7 +30,7 @@ export function home(c) {
  <section class="container section selection-section">
   ${sectionHead(c, c.t("KLÍMAKÍNÁLATUNK", "OUR AIR CONDITIONERS"), c.t("Klímák, összehasonlítható árakkal.", "Air conditioners with clear pricing."), ["klimak", c.t("Összes klíma", "All air conditioners")])}
   <p class="section-intro">${c.t("Nézd meg, mekkora helyiséghez ajánljuk a készüléket, és mennyibe kerül önmagában vagy alapszereléssel.", "Compare recommended room sizes and prices, with or without standard installation.")}</p>
-  <div class="product-grid">${["nordiq-35", "sensa-35", "valtek-35"].map((id) => productCard(c, product(id))).join("")}</div>
+  <div class="product-grid">${["gree-pulse-pro-35", "gree-comfort-pro-35", "daikin-comfora-35"].map((id) => productCard(c, product(id))).join("")}</div>
   ${sampleNotice(c)}
  </section>
  <div class="container">${livingStory(c)}</div>

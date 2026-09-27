@@ -48,11 +48,15 @@ export async function build() {
   );
   const publicRoutes = [
     "",
+    "klimak",
+    "hoszivattyuk",
     "telepites",
     "szolgaltatasok",
     "rolunk",
     "tudastar",
     "kapcsolat",
+    ...products.map((p) => "klimak/" + p.id),
+    ...heatpumps.map((p) => "hoszivattyuk/" + p.id),
   ];
   const sitemapUrls = ["hu", "en"].flatMap((lang) =>
     publicRoutes.map(

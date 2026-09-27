@@ -1,7 +1,7 @@
 import { products, heatpumps } from "./catalogue.js";
 export const config = Object.freeze({
   installationPrice: 109000,
-  catalogueIsSample: true,
+  catalogueIsSample: false,
   quoteEndpoint: null,
   siteOrigin: "https://thermova.hu",
 });
@@ -79,7 +79,7 @@ export function reviewRequired(q) {
     )
   );
 }
-export const newUnit = (pid = "nordiq-35") => ({
+export const newUnit = (pid = "gree-pulse-pro-35") => ({
   pid,
   size: "",
   property: "",
