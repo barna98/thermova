@@ -192,3 +192,9 @@ test("heat-pump callback always requires human technical review", () => {
   assert.equal(payload.interest, "hp");
   assert.equal(payload.humanTechnicalReviewRequired, true);
 });
+
+test("callback form requires an email address", () => {
+  const html = renderPage("hu", "ajanlat", { quote: newQuote() }).body;
+  assert.match(html, /name="contact\.email"[^>]*required/);
+  assert.ok(!html.includes("Email (opcionális)"));
+});

@@ -2,7 +2,7 @@
 
 ## Automatizált ellenőrzés
 
-`npm test`: 15/15 sikeres teszt.
+`npm test`: 16/16 sikeres teszt.
 
 - Standard telepítés 109 000 Ft; több készülék összegei helyesek.
 - Összetett szűrés: méret, használat, ár, márka.
@@ -28,6 +28,7 @@ Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokka
 - Ugyanaz a Comfort 35 szereléssel és anélkül: két külön kosársor, 659 800 Ft készülék + 109 000 Ft szerelés = 768 800 Ft.
 - Vegyes kosár továbbadása: egy szerelendő helyiség, egy további szerelés nélküli készülék; az összeg változatlan.
 - Az egyoldalas visszahíváskérőn a klíma/hőszivattyú választás, az opcionális helyiségszám és terület, valamint a kötelező kapcsolati adatok működnek.
+- A név, email, telefonszám, település és adatkezelési hozzájárulás kötelező; hibás email címmel az űrlap nem küldhető tovább.
 - Bekötött fogadó végpont nélkül az összefoglaló egyértelműen jelzi, hogy nem történt adatküldés vagy visszahíváskérés.
 - A lead-adatcsomag nem tartalmaz automatikus árat vagy nem választott alapértelmezett készüléket; két vagy több klímánál és minden hőszivattyúnál emberi ellenőrzést kér.
 - Mobil termékoldal: a változatváltást követi a rögzített kosárgomb felirata és ára.

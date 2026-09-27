@@ -580,8 +580,8 @@ document.addEventListener("submit", async (event) => {
     captureQuote(form);
     const q = state.quote;
     if (!form.reportValidity()) return;
-    if (!q.contact.name.trim() || !q.contact.city.trim() || !q.contact.phone.trim()) {
-      formError(c.t("Add meg a neved, a telefonszámod és a települést.", "Enter your name, phone number and town or city."));
+    if (!q.contact.name.trim() || !q.contact.city.trim() || !q.contact.phone.trim() || !q.contact.email.trim()) {
+      formError(c.t("Add meg a neved, az email címed, a telefonszámod és a települést.", "Enter your name, email address, phone number and town or city."));
       return;
     }
     if (!q.units.length && q.kind === "device") {

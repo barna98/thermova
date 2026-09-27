@@ -77,7 +77,7 @@ export function quotePage(c, q) {
         <div class="fields-grid">
         ${field(c,{name:"contact.name",label:c.t("Név", "Name"),value:q.contact.name,extra:'autocomplete="name" minlength="2" maxlength="100"'})}
         ${field(c,{name:"contact.phone",label:c.t("Telefonszám", "Phone number"),type:"tel",value:q.contact.phone,extra:'autocomplete="tel" pattern="[+0-9 ()-]{7,25}" maxlength="25"'})}
-        ${field(c,{name:"contact.email",label:c.t("Email (opcionális)", "Email (optional)"),type:"email",value:q.contact.email,required:false,extra:'autocomplete="email" maxlength="254"'})}
+        ${field(c,{name:"contact.email",label:c.t("Email", "Email"),type:"email",value:q.contact.email,extra:'autocomplete="email" maxlength="254"'})}
         ${field(c,{name:"contact.city",label:c.t("Település", "Town / city"),value:q.contact.city,extra:'autocomplete="address-level2" maxlength="100"'})}
         </div>
         <label class="field"><span>${c.t("Megjegyzés (opcionális)", "Notes (optional)")}</span><textarea name="note" rows="3" maxlength="3000" placeholder="${c.t("Például: három szobába keresek klímát, fűtésre is.", "For example: air conditioning for three rooms, with heating too.")}">${e(q.note)}</textarea></label>
