@@ -34,6 +34,7 @@ Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokka
 - Mobil termékoldal: a változatváltást követi a rögzített kosárgomb felirata és ára.
 - Főoldal, angol klímakategória, klímatermékoldal és hőszivattyús ajánlatkérés: 320, 768 és 1440 px szélességen nincs vízszintes túlcsordulás.
 - Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; eredeti termékfotók egységes világos felületen, narancssárga ajánlási címkékkel és felirat nélkül.
+- A landing hero 1440 és 390 px szélességen ellenőrizve: nincs fejléc alatti üres sáv vagy vízszintes túlcsordulás; a főcím sorai, az ékezetek, a leírás, a CTA-k és az alsó információ között következetes térköz marad.
 - 390 px mobilmenü: panelanimáció, sorszámozott navigáció, stabil kör alakú bezárógomb és fókusz-visszaadás.
 - A karakteres CTA-nyilak és pipák helyett egységes SVG/CSS jelek jelennek meg.
 - A produkciós képernyőképek alapján javítva: megszűnt a fő tartalom kék fókuszkerete, a logó tiszta arculati-board kivágást használ, a klímakategória nyitóblokkja képes szerkesztői elrendezést kapott.
