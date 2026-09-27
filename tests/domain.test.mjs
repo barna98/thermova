@@ -11,6 +11,7 @@ import {
   safeCart,
   cartTotals,
   cartKey,
+  leadPayload,
 } from "../src/domain.js";
 import { renderPage, documentHTML } from "../src/render.js";
 import { routes } from "../scripts/build.mjs";
@@ -171,4 +172,23 @@ test("mixed quote keeps device-only lines and requires human review", () => {
     total: 490899,
   });
   assert.equal(reviewRequired(q), true);
+});
+
+test("generic callback request contains no invented product or automatic price", () => {
+  const q = newQuote();
+  q.contact = { name: "Teszt", email: "", phone: "+36 30 000 0000", city: "Budapest", consent: true };
+  q.roomCount = "2";
+  const payload = leadPayload(q, "hu");
+  assert.equal(payload.selection, null);
+  assert.equal(payload.humanTechnicalReviewRequired, true);
+  assert.ok(!("total" in payload));
+  assert.ok(!JSON.stringify(payload).includes("price"));
+});
+
+test("heat-pump callback always requires human technical review", () => {
+  const q = newQuote("hp");
+  q.interest = "hp";
+  const payload = leadPayload(q, "hu");
+  assert.equal(payload.interest, "hp");
+  assert.equal(payload.humanTechnicalReviewRequired, true);
 });

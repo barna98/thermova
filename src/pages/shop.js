@@ -13,6 +13,7 @@ import {
   helpBanner,
   field,
   productAsset,
+  productBadge,
   livingStory,
   brandGallery,
   icon,
@@ -111,7 +112,7 @@ export function productPage(c, id, withInstallation = true) {
           "Your building has unusual heat losses",
           "Your priorities require a different specification",
         ];
-  return `<div class="container">${breadcrumb(c, [[c.t("Klímák", "Air conditioners"), "klimak"], [`${p.brand} ${p.name}`]])}<section class="product-detail"><div class="detail-visual"><span class="product-badge">THERMOVA SELECTION</span>${image(productAsset(p), `${p.brand} ${p.name} — ${c.t("termékfotó", "product image")}`, { hero: true })}<p>${c.t("Egységesített termékfotó · a pontos modellről", "Standardised product image · of the exact model")}</p></div><div class="detail-info"><p class="eyebrow">${e(p.brand)} / ${c.t("INVERTERES SPLIT KLÍMA", "INVERTER SPLIT AIR CONDITIONER")}</p><h1>${e(p.name)}</h1><p class="product-sku">${e(p.sku)}</p><p class="detail-position">${productText(c, p)}</p><dl class="spec-strip">${[
+  return `<div class="container">${breadcrumb(c, [[c.t("Klímák", "Air conditioners"), "klimak"], [`${p.brand} ${p.name}`]])}<section class="product-detail"><div class="detail-visual"><span class="product-badge">${productBadge(c, p)}</span>${image(productAsset(p), `${p.brand} ${p.name} — ${c.t("termékfotó", "product image")}`, { hero: true })}</div><div class="detail-info"><p class="eyebrow">${e(p.brand)} / ${c.t("INVERTERES SPLIT KLÍMA", "INVERTER SPLIT AIR CONDITIONER")}</p><h1>${e(p.name)}</h1><p class="product-sku">${e(p.sku)}</p><p class="detail-position">${productText(c, p)}</p><dl class="spec-strip">${[
     [p.room.join("–") + " m²", c.t("Ajánlott méret", "Room size")],
     [p.kw + " kW", c.t("Hűtőteljesítmény", "Cooling capacity")],
     [p.cls, c.t("Energiaosztály", "Energy class")],

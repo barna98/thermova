@@ -41,5 +41,5 @@ export function home(c) {
  </section>
  <div class="container">${installBlock(c)}</div>
  <div class="container">${brandGallery(c)}</div>
- <section class="container closing-statement"><p class="eyebrow">${c.t("AJÁNLATKÉRÉS", "REQUEST A QUOTE")}</p><h2>${c.t("Kérj ajánlatot<br>a telepítésre.", "Get a quote<br>for installation.")}</h2><p>${c.t("Írd meg, hová szeretnél klímát. Az ajánlatkérőben a helyszínről és az elérhetőségeidről kérdezünk.", "Tell us where you need air conditioning. The form asks about the site and your contact details.")}</p><a class="button" href="${c.url("ajanlat")}">${c.t("Klímatelepítési ajánlatot kérek", "Request an AC installation quote")} ${arrow}</a></section>`;
+ <section class="container closing-statement"><p class="eyebrow">${c.t("AJÁNLATKÉRÉS", "REQUEST A QUOTE")}</p><h2>${c.t("Kérj ajánlatot<br>a telepítésre.", "Get a quote<br>for installation.")}</h2><p>${c.t("Néhány alapadat és az elérhetőséged elég. Felhívunk, átbeszéljük az igényeidet, és ezek alapján készítünk ajánlatot.", "Share a few basic details and how to reach you. We’ll call to discuss your needs before preparing a quote.")}</p><a class="button" href="${c.url("ajanlat")}">${c.t("Klímatelepítési ajánlatot kérek", "Request an AC installation quote")} ${arrow}</a></section>`;
 }

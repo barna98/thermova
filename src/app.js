@@ -5,6 +5,7 @@ import {
   product,
   system,
   newQuote,
+  leadPayload,
   newUnit,
   safeCart,
   totals,
@@ -227,7 +228,7 @@ function cartDialog() {
           })
           .join(
             "",
-          )}<dl class="cart-breakdown"><div><dt>${c.t("Készülékek", "Equipment")}</dt><dd>${c.money(amount.device)}</dd></div><div><dt>${c.t("Alapszerelés", "Standard installation")} × ${amount.installedCount}</dt><dd>${c.money(amount.installation)}</dd></div></dl><div class="cart-total"><span>${c.t("Összesen, bruttó", "Total, incl. VAT")}</span><strong>${c.money(amount.total)}</strong></div><p class="small">${amount.installedCount ? c.t("A standard telepítés tartalmát a helyszíni feltételekkel egyeztetjük. A kábelcsatornázás külön tétel.", "Standard installation is subject to site conditions. Cable trunking is extra.") : c.t("Telepítés nélkül. A szállítás feltételeit egyeztetéskor pontosítjuk.", "Without installation. Delivery terms are confirmed during consultation.")}</p><a class="button button-wide" href="${c.url(amount.installedCount ? "ajanlat" : "keszulekigeny")}${amount.installedCount ? "?cart=1" : ""}">${amount.installedCount ? c.t("Tovább a telepítési adatokhoz", "Continue to installation details") : c.t("Készülékigény egyeztetése", "Discuss my unit request")} ${arrow}</a>${state.cart.reduce((n, x) => n + x.qty, 0) >= 2 ? `<p class="cart-review-note">${c.t("Két vagy több klíma: a végleges ajánlat előtt emberi ellenőrzés szükséges.", "Two or more units: human review is required before the final quote.")}</p>` : ""}<p class="notice">${c.t("Ez az egyeztetési kosár nem indít online fizetést. A készülékárat, elérhetőséget és szállítást visszaigazoljuk.", "This consultation bag does not start online payment. Unit price, availability and delivery are confirmed with you.")}</p>`
+          )}<dl class="cart-breakdown"><div><dt>${c.t("Készülékek", "Equipment")}</dt><dd>${c.money(amount.device)}</dd></div><div><dt>${c.t("Alapszerelés", "Standard installation")} × ${amount.installedCount}</dt><dd>${c.money(amount.installation)}</dd></div></dl><div class="cart-total"><span>${c.t("Összesen, bruttó", "Total, incl. VAT")}</span><strong>${c.money(amount.total)}</strong></div><p class="small">${amount.installedCount ? c.t("A standard telepítés tartalmát a helyszíni feltételekkel egyeztetjük. A kábelcsatornázás külön tétel.", "Standard installation is subject to site conditions. Cable trunking is extra.") : c.t("Telepítés nélkül. A szállítás feltételeit egyeztetéskor pontosítjuk.", "Without installation. Delivery terms are confirmed during consultation.")}</p><a class="button button-wide" href="${c.url(amount.installedCount ? "ajanlat" : "keszulekigeny")}${amount.installedCount ? "?cart=1" : ""}">${amount.installedCount ? c.t("Visszahívást kérek", "Request a callback") : c.t("Készülékigény egyeztetése", "Discuss my unit request")} ${arrow}</a>${state.cart.reduce((n, x) => n + x.qty, 0) >= 2 ? `<p class="cart-review-note">${c.t("Két vagy több klíma: a végleges ajánlat előtt emberi ellenőrzés szükséges.", "Two or more units: human review is required before the final quote.")}</p>` : ""}<p class="notice">${c.t("Ez az egyeztetési kosár nem indít online fizetést. A készülékárat, elérhetőséget és szállítást visszaigazoljuk.", "This consultation bag does not start online payment. Unit price, availability and delivery are confirmed with you.")}</p>`
       : `<div class="empty-state"><h3>${c.t("Még üres a kosarad.", "Your bag is empty.")}</h3><p>${c.t("Nézz körül, és találd meg az otthonodhoz illő klímát.", "Explore air conditioners for your home.")}</p><a href="${c.url("klimak")}" class="button">${c.t("Klímák böngészése", "Explore air conditioners")} ${arrow}</a></div>`,
   );
 }
@@ -292,23 +293,11 @@ function formError(message) {
 function downloadQuote() {
   const q = state.quote;
   const data = {
-    schemaVersion: 1,
-    status: "prepared-not-sent",
+    schemaVersion: 2,
+    status: q.sent ? "sent" : "prepared-not-sent",
     locale: c.lang,
     createdAt: new Date().toISOString(),
-    request: {
-      ...q,
-      files: q.files.map(({ name, size, type }) => ({ name, size, type })),
-    },
-    humanTechnicalReviewRequired: reviewRequired(q),
-    indicativePrices:
-      q.kind === "hp"
-        ? { system: system(q.system).price }
-        : q.kind === "device"
-          ? { device: totals(q.units, q.deviceOnly).device }
-          : totals(q.units, q.deviceOnly),
-    currency: "HUF",
-    pricesIncludeVat: true,
+    request: leadPayload(q, c.lang),
     sampleCatalogue: config.catalogueIsSample,
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -512,7 +501,7 @@ document.addEventListener("change", (event) => {
   }
   if (el.form?.id === "quote-form") {
     captureQuote(el.form);
-    if (el.name.endsWith(".property") || el.name.endsWith(".pid")) {
+    if (el.name === "interest" || el.name.endsWith(".property") || el.name.endsWith(".pid")) {
       render();
       document.querySelector(`[name="${el.name}"]`)?.focus();
     }
@@ -572,7 +561,7 @@ document.addEventListener("reset", (event) => {
     render({ focus: "#filters select" });
   }
 });
-document.addEventListener("submit", (event) => {
+document.addEventListener("submit", async (event) => {
   const form = event.target;
   if (form.id === "filters") {
     event.preventDefault();
@@ -590,39 +579,40 @@ document.addEventListener("submit", (event) => {
     event.preventDefault();
     captureQuote(form);
     const q = state.quote;
-    if (q.kind === "hp" && q.step === 3 && !q.functions.length) {
-      formError(
-        c.t(
-          "Válassz legalább egy kívánt funkciót.",
-          "Choose at least one required function.",
-        ),
-      );
+    if (!form.reportValidity()) return;
+    if (!q.contact.name.trim() || !q.contact.city.trim() || !q.contact.phone.trim()) {
+      formError(c.t("Add meg a neved, a telefonszámod és a települést.", "Enter your name, phone number and town or city."));
       return;
     }
-    if (q.step === 4) {
-      const contact = q.contact;
-      if (!contact.city.trim() || !contact.name.trim()) {
-        formError(
-          c.t(
-            "Add meg a neved és a települést.",
-            "Enter your name and town or city.",
-          ),
-        );
+    if (!q.units.length && q.kind === "device") {
+      formError(c.t("Előbb válassz egy készüléket a kosárba.", "Add a unit to your bag first."));
+      return;
+    }
+    const submit = form.querySelector('[type="submit"]');
+    if (submit.disabled) return;
+    if (config.quoteEndpoint) {
+      submit.disabled = true;
+      submit.textContent = c.t("Küldés…", "Sending…");
+      try {
+        const response = await fetch(config.quoteEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(leadPayload(q, c.lang)),
+        });
+        if (!response.ok) throw new Error("Request failed");
+        const result = await response.json();
+        if (result.success !== true) throw new Error("Receipt not confirmed");
+        q.sent = true;
+      } catch {
+        submit.disabled = false;
+        submit.textContent = c.t("Visszahívást kérek", "Request a callback");
+        formError(c.t("Nem sikerült elküldeni az érdeklődést. Az adataid megmaradtak, kérjük, próbáld újra.", "We couldn’t send your enquiry. Your details are preserved; please try again."));
         return;
       }
-      if (!q.units.length && q.kind === "device") {
-        formError(
-          c.t(
-            "Előbb válassz egy készüléket a kosárba.",
-            "Add a unit to your bag first.",
-          ),
-        );
-        return;
-      }
-      q.complete = true;
-    } else q.step++;
+    }
+    q.complete = true;
     render({ focus: "#step-title" });
-    document.querySelector(".stepper").scrollIntoView({ block: "start" });
+    document.querySelector(".lead-form-panel").scrollIntoView({ block: "start" });
   }
 });
 document.addEventListener("click", (event) => {
