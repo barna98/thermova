@@ -16,8 +16,8 @@ export function home(c) {
  <section class="hero container">
   <div class="hero-copy">
    <p class="eyebrow"><span class="orange-line"></span>${c.t("OTTHONOKNAK ÉS VÁLLALKOZÁSOKNAK", "FOR HOMES AND BUSINESSES")}</p>
-   <h1>${c.t("Klíma és<br>hőszivattyú,<br><span>telepítéssel is.</span>", "Air conditioning<br>and heat pumps.<br><span>Installation too.</span>")}</h1>
-   <p class="hero-lead">${c.t("Segítünk a választásban, és a telepítést is vállaljuk. Lakásba, családi házba, irodába vagy üzlethelyiségbe.", "We help you choose and can handle installation too. For flats, houses, offices and shops.")}</p>
+   <h1>${c.t("Modern megoldások.<br><span>Élhetőbb épületek.</span>", "Modern solutions.<br><span>More liveable buildings.</span>")}</h1>
+   <p class="hero-lead">${c.t("Klíma, hőszivattyú és szakszerű telepítés otthonoknak és vállalkozásoknak — átlátható árakkal, szakértő segítséggel.", "Air conditioning, heat pumps and professional installation for homes and businesses — with clear pricing and expert guidance.")}</p>
    <div class="hero-actions"><a class="button" href="${c.url("klimak")}">${c.t("Klímát választok", "Find my air conditioner")} ${arrow}</a><a class="text-link" href="${c.url("valaszto")}">${c.t("Segítsetek dönteni", "Help me choose")} ${arrow}</a></div>
    <div class="hero-foot"><span>${c.t("Készülékek szereléssel vagy anélkül", "Units with or without installation")}</span></div>
   </div>

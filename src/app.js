@@ -132,6 +132,7 @@ function render({ focus = null, scroll = false } = {}) {
       (a) => (a.href = `/${a.hreflang}/${route.path ? route.path + "/" : ""}`),
     );
   updateCartBadge();
+  initMotion();
   if (scroll) window.scrollTo({ top: 0, behavior: "instant" });
   if (focus) document.querySelector(focus)?.focus({ preventScroll: !scroll });
 }
@@ -155,6 +156,32 @@ function updateCartBadge() {
         : c.t("Kosár, üres", "Bag, empty"),
     );
   });
+}
+let motionObserver;
+function initMotion() {
+  motionObserver?.disconnect();
+  const targets = document.querySelectorAll(
+    ".section-head, .category-path, .product-card, .living-story, .help-banner, .split-editorial, .installation, .brand-story-heading, .brand-photo, .closing-statement, .catalogue-intro > div, .catalogue-intro-media, .product-detail, .hp-card, .principles > *",
+  );
+  targets.forEach((el, index) => {
+    el.classList.add("reveal");
+    el.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 70}ms`);
+  });
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    targets.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+  motionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        motionObserver.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -7% 0px" },
+  );
+  targets.forEach((el) => motionObserver.observe(el));
 }
 function saveCart() {
   try {
@@ -196,7 +223,7 @@ function cartDialog() {
           .map((item) => {
             const p = product(item.id),
               key = cartKey(item);
-            return `<div class="cart-item">${image(productAsset(p), c.t("Márkázott látványkép", "Branded concept"), { small: true })}<div><h3>${p.brand} ${p.name}</h3><p class="cart-variant">${item.installation ? c.t("Alapszereléssel", "With standard installation") : c.t("Csak készülék · szerelés nélkül", "Unit only · without installation")}</p><p>${c.money(p.price + (item.installation ? config.installationPrice : 0))} <small>/ ${c.t("db", "unit")}</small></p><div class="quantity-control"><button data-action="cart-minus" data-key="${key}" aria-label="${e(c.t("Kevesebb: ", "Decrease: ") + p.name)}">−</button><span aria-label="${c.t("Darabszám", "Quantity")}">${item.qty}</span><button data-action="cart-plus" data-key="${key}" ${item.qty >= 20 ? "disabled" : ""} aria-label="${e(c.t("Több: ", "Increase: ") + p.name)}">+</button><button class="remove" data-action="cart-remove" data-key="${key}">${c.t("Törlés", "Remove")}</button></div></div></div>`;
+            return `<div class="cart-item">${image(productAsset(p), c.t("Termékfotó", "Product image"), { small: true })}<div><h3>${p.brand} ${p.name}</h3><p class="cart-variant">${item.installation ? c.t("Alapszereléssel", "With standard installation") : c.t("Csak készülék · szerelés nélkül", "Unit only · without installation")}</p><p>${c.money(p.price + (item.installation ? config.installationPrice : 0))} <small>/ ${c.t("db", "unit")}</small></p><div class="quantity-control"><button data-action="cart-minus" data-key="${key}" aria-label="${e(c.t("Kevesebb: ", "Decrease: ") + p.name)}">−</button><span aria-label="${c.t("Darabszám", "Quantity")}">${item.qty}</span><button data-action="cart-plus" data-key="${key}" ${item.qty >= 20 ? "disabled" : ""} aria-label="${e(c.t("Több: ", "Increase: ") + p.name)}">+</button><button class="remove" data-action="cart-remove" data-key="${key}">${c.t("Törlés", "Remove")}</button></div></div></div>`;
           })
           .join(
             "",
