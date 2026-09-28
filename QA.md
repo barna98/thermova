@@ -2,7 +2,7 @@
 
 ## Automatizált ellenőrzés
 
-`npm test`: 16/16 sikeres teszt.
+`npm test`: 19/19 sikeres teszt.
 
 - Standard telepítés 109 000 Ft; több készülék összegei helyesek.
 - Összetett szűrés: méret, használat, ár, márka.
@@ -35,6 +35,10 @@ Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokka
 - Főoldal, angol klímakategória, klímatermékoldal és hőszivattyús ajánlatkérés: 320, 768 és 1440 px szélességen nincs vízszintes túlcsordulás.
 - Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; eredeti termékfotók egységes világos felületen, narancssárga ajánlási címkékkel és felirat nélkül.
 - A landing hero 1440 és 390 px szélességen ellenőrizve: nincs fejléc alatti üres sáv vagy vízszintes túlcsordulás; a főcím sorai, az ékezetek, a leírás, a CTA-k és az alsó információ között következetes térköz marad.
+- A hero 1728 px-es asztali nézetben pontosan a viewport teljes szélességét használja; a két megoldáskártya képe a kártyán belül marad és teljes egészében látszik.
+- A hero mindkét termékkategóriához közvetlen CTA-t ad, a nem kattintható képfelirat eltűnt, a dekoratív sorszámozás nem jelenik meg a navigációban és a tartalmi blokkokban.
+- A kapcsolat oldalon és a footerben kattintható email- és telefonszámhivatkozások jelennek meg; mobilnézetben sem rejtjük el őket.
+- A termékcímkék kizárólag katalógusadatból képzett, ellenőrizhető tulajdonságot mutatnak: fűtési ajánlás, minimum zajszint, Wi-Fi vagy energiaosztály.
 - 390 px mobilmenü: panelanimáció, sorszámozott navigáció, stabil kör alakú bezárógomb és fókusz-visszaadás.
 - A karakteres CTA-nyilak és pipák helyett egységes SVG/CSS jelek jelennek meg.
 - A produkciós képernyőképek alapján javítva: megszűnt a fő tartalom kék fókuszkerete, a logó tiszta arculati-board kivágást használ, a klímakategória nyitóblokkja képes szerkesztői elrendezést kapott.
