@@ -329,7 +329,7 @@ document.addEventListener("click", (event) => {
             ["kapcsolat", "Kapcsolat", "Contact"],
             ["ajanlat", "Ajánlatot kérek", "Get a quote"],
           ]
-            .map(([u, hu, en], i) => `<a href="${c.url(u)}"><span>0${i + 1}</span><strong>${c.t(hu, en)}</strong>${arrow}</a>`)
+            .map(([u, hu, en]) => `<a href="${c.url(u)}"><strong>${c.t(hu, en)}</strong>${arrow}</a>`)
             .join("")}</nav><div class="menu-meta"><a href="${c.url("telepites")}">${c.t("Standard telepítés", "Standard installation")} · ${c.money(config.installationPrice)}</a><span>HU / EN</span></div>`,
         );
         break;

@@ -6,6 +6,7 @@ import {
   helpBanner,
   brandGallery,
 } from "../components.js";
+import { contactDetails } from "../domain.js";
 export function information(c, path) {
   const titles = {
     telepites: c.t("Standard telepítés", "Standard installation"),
@@ -20,7 +21,7 @@ export function information(c, path) {
   if (path === "telepites")
     body = `${installBlock(c, true)}${brandGallery(c)}<section class="section narrow"><h2>${c.t("Mikor szükséges egyedi ajánlat?", "When do you need an individual quote?")}</h2><p>${c.t("Három méternél hosszabb csövezés, nehéz megközelítés, nagy munkamagasság, speciális falazat vagy villamoshálózat-átalakítás esetén a helyszíni feltételek alapján egyeztetünk. A kábelcsatornázás minden esetben külön tétel.", "Pipework over three metres, difficult access, work at height, special wall materials or electrical alterations are assessed for your site. Cable trunking is always a separate item.")}</p><a class="button" href="${c.url("ajanlat")}">${c.t("Ajánlatot kérek telepítéssel", "Get an installation quote")} ${arrow}</a></section>`;
   if (path === "rolunk")
-    body = `<section class="split-editorial section"><div><p class="eyebrow">${c.t("MODERN MEGOLDÁSOK. ÉLHETŐBB ÉPÜLETEK.", "MODERN SOLUTIONS. MORE LIVEABLE BUILDINGS.")}</p><h2>${c.t("Készülékválasztás<br>és telepítés egy helyen.", "Equipment and installation<br>in one place.")}</h2><p>${c.t("Klímák és hőszivattyús rendszerek kiválasztásában és telepítésében segítünk lakossági és céges ügyfeleknek. A helyiség, az épület és a tervezett használat alapján ajánlunk megoldást.", "We help households and businesses choose and install air conditioning and heat pump systems. Recommendations take the space, building and intended use into account.")}</p><p>${c.t("Megmutatjuk, mire elég egy modell, mikor érdemes többet választani, és mikor kérünk műszaki ellenőrzést.", "We explain what a model can do, when to consider another option and when technical review is needed.")}</p></div>${image("architecture", c.t("Modern otthon – építészeti látványkép", "Modern home — architectural concept"))}</section><section class="principles">${[
+    body = `<section class="split-editorial section"><div><p class="eyebrow">${c.t("NEM GÉPET ADUNK. MEGOLDÁST ÉPÍTÜNK.", "WE DON’T JUST SUPPLY EQUIPMENT. WE BUILD SOLUTIONS.")}</p><h2>${c.t("Készülékválasztás<br>és telepítés egy helyen.", "Equipment and installation<br>in one place.")}</h2><p>${c.t("Klímák és hőszivattyús rendszerek kiválasztásában és telepítésében segítünk lakossági és céges ügyfeleknek. A helyiség, az épület és a tervezett használat alapján ajánlunk megoldást.", "We help households and businesses choose and install air conditioning and heat pump systems. Recommendations take the space, building and intended use into account.")}</p><p>${c.t("Megmutatjuk, mire elég egy modell, mikor érdemes többet választani, és mikor kérünk műszaki ellenőrzést.", "We explain what a model can do, when to consider another option and when technical review is needed.")}</p></div>${image("architecture", c.t("Modern otthon – építészeti látványkép", "Modern home — architectural concept"))}</section><section class="principles">${[
       [
         c.t("Érthető választás", "A clear choice"),
         c.t(
@@ -44,8 +45,7 @@ export function information(c, path) {
       ],
     ]
       .map(
-        ([t, p], i) =>
-          `<div><span class="index">0${i + 1}</span><h3>${t}</h3><p>${p}</p></div>`,
+        ([t, p]) => `<div><h3>${t}</h3><p>${p}</p></div>`,
       )
       .join("")}</section>${brandGallery(c)}${helpBanner(c)}`;
   if (path === "szolgaltatasok")
@@ -92,8 +92,8 @@ export function information(c, path) {
       ],
     ]
       .map(
-        ([t, p, u], i) =>
-          `<a href="${c.url(u)}"><span class="index">0${i + 1}</span><div><h2>${t}</h2><p>${p}</p></div>${arrow}</a>`,
+        ([t, p, u]) =>
+          `<a href="${c.url(u)}"><div><h2>${t}</h2><p>${p}</p></div>${arrow}</a>`,
       )
       .join("")}</div>`;
   if (path === "tudastar")
@@ -134,18 +134,18 @@ export function information(c, path) {
           "Why is a heat pump request different?",
         ),
         c.t(
-          "A hőszivattyú a teljes fűtési rendszer része. A hőleadók, a hőveszteség, a melegvízigény és a kívánt hűtés befolyásolják a tervezést. Ezért minden projekthez emberi műszaki validáció szükséges.",
-          "A heat pump is part of an entire heating system. Emitters, heat loss, hot water demand and cooling requirements inform the design. That is why every project requires human technical validation.",
+          "A hőszivattyú a teljes épületgépészeti rendszer része. A hőleadók, a hőveszteség, a melegvízigény és a kívánt hűtés befolyásolják a tervezést. Ezért minden projekthez emberi műszaki validáció szükséges.",
+          "A heat pump is part of the building’s complete mechanical system. Emitters, heat loss, hot water demand and cooling requirements inform the design. That is why every project requires human technical validation.",
         ),
       ],
     ]
       .map(
         ([t, p], i) =>
-          `<details ${i === 0 ? "open" : ""}><summary><span class="index">0${i + 1}</span>${t}<span aria-hidden="true">+</span></summary><p>${p}</p></details>`,
+          `<details ${i === 0 ? "open" : ""}><summary>${t}<span aria-hidden="true">+</span></summary><p>${p}</p></details>`,
       )
       .join("")}</div>${helpBanner(c)}`;
   if (path === "kapcsolat")
-    body = `<section class="contact-options"><div><p class="eyebrow">${c.t("KEZDJÜK AZ IGÉNYEIDDEL", "START WITH YOUR NEEDS")}</p><h2>${c.t("Miben segíthetünk?", "How can we help?")}</h2><p>${c.t("Válaszd ki, milyen megoldást keresel. Néhány alapadat elég a következő lépéshez.", "Choose the solution you are looking for. A few details are enough to take the next step.")}</p></div><div><a href="${c.url("ajanlat")}"><h3>${c.t("Klíma és telepítés", "Air conditioning and installation")}</h3>${arrow}</a><a href="${c.url("rendszer-ajanlat")}"><h3>${c.t("Hőszivattyús rendszer", "Heat pump system")}</h3>${arrow}</a><a href="${c.url("ajanlat")}?service=consultation"><h3>${c.t("Karbantartás vagy egyedi kérdés", "Maintenance or individual enquiry")}</h3>${arrow}</a></div></section><p class="notice">${c.t("A közvetlen elérhetőségek és cégadatok még nem állnak rendelkezésre. A bemutató ajánlatkérője letölthető összefoglalót készít; üzenetet nem továbbít.", "Direct contact and company details have not yet been provided. The preview request form creates a downloadable summary and does not send messages.")}</p>`;
+    body = `<section class="contact-options"><div><p class="eyebrow">${c.t("KEZDJÜK AZ IGÉNYEIDDEL", "START WITH YOUR NEEDS")}</p><h2>${c.t("Miben segíthetünk?", "How can we help?")}</h2><p>${c.t("Válaszd ki, milyen megoldást keresel, vagy keress minket közvetlenül.", "Choose the solution you need, or contact us directly.")}</p><address class="contact-direct"><a href="mailto:${contactDetails.email}"><span>${c.t("Email", "Email")}</span><strong>${contactDetails.email}</strong></a>${contactDetails.phones.map((phone) => `<a href="tel:${phone.href}"><span>${c.t("Telefon", "Phone")}</span><strong>${phone.display}</strong></a>`).join("")}</address></div><div><a href="${c.url("ajanlat")}"><h3>${c.t("Klíma és telepítés", "Air conditioning and installation")}</h3>${arrow}</a><a href="${c.url("rendszer-ajanlat")}"><h3>${c.t("Hőszivattyús rendszer", "Heat pump system")}</h3>${arrow}</a><a href="${c.url("ajanlat")}?service=consultation"><h3>${c.t("Karbantartás vagy egyedi kérdés", "Maintenance or individual enquiry")}</h3>${arrow}</a></div></section>`;
   if (path === "adatkezeles")
     body = `<article class="prose narrow"><p class="notice">${c.t("Ez a frontend bemutatójára vonatkozó működési tájékoztató, nem a végleges szolgáltatás adatkezelési szabályzata.", "This describes the frontend preview, not the privacy policy of the final service.")}</p><h2>${c.t("Mi történik a megadott adatokkal?", "What happens to your details?")}</h2><p>${c.t("Az ajánlatkérőben megadott adatok és a kiválasztott fájlok a böngésző memóriájában maradnak. Nem küldjük őket szerverre. Az oldal újratöltésekor törlődnek. A letöltött összefoglaló a saját eszközödre kerül.", "Request details and selected files remain in browser memory. They are not sent to a server and are cleared when the page reloads. Downloaded summaries are saved to your own device.")}</p><h2>${c.t("Helyi tárolás", "Local storage")}</h2><p>${c.t("A kosár kizárólag termékazonosítókat és darabszámokat ment a böngésző helyi tárolójába. Személyes kapcsolattartási adatot nem tárol tartósan. Analitikát és marketingkövetést nem használunk.", "The bag stores only product IDs and quantities in browser local storage. Contact details are not stored persistently. No analytics or marketing tracking is included.")}</p><h2>${c.t("Betűtípus", "Typeface")}</h2><p>${c.t("A Manrope betűtípus helyben, az oldal saját fájljaiból töltődik be. A betűk megjelenítéséhez nem kapcsolódunk külső szolgáltatáshoz.", "The Manrope typeface loads locally from the site’s own files. No external font service is contacted.")}</p><h2>${c.t("Éles szolgáltatás előtt", "Before launch")}</h2><p>${c.t("A tényleges adatkezelő adatait, az adatkezelés jogalapját, időtartamát, az adatfeldolgozókat és az érintetti jogok gyakorlásának módját az üzemeltetőnek kell megadnia és jóváhagynia. Addig az űrlapok nem továbbítanak adatot.", "The operator must supply and approve the controller details, lawful basis, retention period, processors and how individuals can exercise their rights. Until then, the forms do not transmit data.")}</p></article>`;
   return `<div class="container">${breadcrumb(c, [[titles[path]]])}<section class="page-intro"><p class="eyebrow">THERMOVA</p><h1>${titles[path]}</h1></section>${body}</div>`;

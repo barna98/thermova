@@ -198,3 +198,27 @@ test("callback form requires an email address", () => {
   assert.match(html, /name="contact\.email"[^>]*required/);
   assert.ok(!html.includes("Email (opcionális)"));
 });
+
+test("home presents both solution paths without decorative numbering", () => {
+  const html = renderPage("hu", "").body;
+  assert.match(html, /OTTHONODNAK ÉS VÁLLALKOZÁSODNAK/);
+  assert.match(html, /Nem gépet adunk/);
+  assert.match(html, /Hőszivattyút választok/);
+  assert.ok(!html.includes("THERMOVA LIVING"));
+  assert.ok(!/0[1-9] \/ (KLÍMÁK|HŐSZIVATTYÚK|KISZÁLLÁS|BEÜZEMELÉS)/.test(html));
+});
+
+test("contact details are available as working email and phone links", () => {
+  const html = renderPage("hu", "kapcsolat").body;
+  assert.match(html, /mailto:info@thermova\.hu/);
+  assert.match(html, /tel:\+36309142183/);
+  assert.match(html, /tel:\+36706757028/);
+});
+
+test("product badges only use measurable catalogue attributes", () => {
+  const html = renderPage("hu", "klimak").body;
+  assert.ok(!html.includes("Thermova ajánlja"));
+  assert.ok(!html.includes("Prémium választás"));
+  assert.ok(!html.includes("Kedvező ár"));
+  assert.match(html, /(Wi-Fi vezérlés|Akár [0-9]+ dB\(A\)|energiaosztály|Fűtésre is ajánljuk)/);
+});

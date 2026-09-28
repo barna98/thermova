@@ -5,6 +5,13 @@ export const config = Object.freeze({
   quoteEndpoint: null,
   siteOrigin: "https://thermova.hu",
 });
+export const contactDetails = Object.freeze({
+  email: "info@thermova.hu",
+  phones: [
+    { display: "+36 30 914 2183", href: "+36309142183" },
+    { display: "+36 70 675 7028", href: "+36706757028" },
+  ],
+});
 export const product = (id) => products.find((p) => p.id === id);
 export const system = (id) => heatpumps.find((p) => p.id === id);
 export function filterProducts(filters = {}) {

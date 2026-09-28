@@ -46,7 +46,7 @@ export function selector(c, filters = null) {
   ]
     .map(
       ([name, title, opts], i) =>
-        `<fieldset><legend><span>0${i + 1}</span>${title}</legend><div class="option-grid">${opts.map(([v, l]) => `<label class="option"><input type="radio" name="${name}" value="${v}" required ${filters?.[name] === v ? "checked" : ""}><span>${l}</span></label>`).join("")}</div></fieldset>`,
+        `<fieldset><legend>${title}</legend><div class="option-grid">${opts.map(([v, l]) => `<label class="option"><input type="radio" name="${name}" value="${v}" required ${filters?.[name] === v ? "checked" : ""}><span>${l}</span></label>`).join("")}</div></fieldset>`,
     )
     .join(
       "",
@@ -91,7 +91,7 @@ export function quotePage(c, q) {
         [c.t("Felhívunk.","We call you."),c.t("Átbeszéljük az igényeidet és a helyszín adottságait.","We discuss your needs and the property.")],
         [c.t("Segítünk választani.","We help you choose."),c.t("Közösen kiválasztjuk a megfelelő készüléket vagy rendszert.","Together we select the right equipment or system.")],
         [c.t("Ajánlatot készítünk.","We prepare your quote."),c.t("Az egyeztetett műszaki tartalomra, átlátható tételekkel.","Based on the agreed technical scope, with clear pricing.")]
-      ].map(([title,body],i)=>`<li><span>0${i+1}</span><div><h3>${title}</h3><p>${body}</p></div></li>`).join("")}</ol>
+      ].map(([title,body])=>`<li><div><h3>${title}</h3><p>${body}</p></div></li>`).join("")}</ol>
       ${context ? `<div class="lead-context"><h3>${c.t("Erről érdeklődsz", "Your selection")}</h3>${context}<p class="small">${c.t("A kiválasztott termékeket továbbvisszük az egyeztetésre. Ez még nem megrendelés.", "Your selections are included for consultation. This is not an order.")}</p></div>` : ""}
       <p class="lead-review">${c.t("Több klímánál és minden hőszivattyús rendszernél szakember ellenőrzi a műszaki megoldást a végleges ajánlat előtt.", "A specialist reviews every multi-unit and heat-pump project before the final quote.")}</p></aside></div></div>`;
 }
