@@ -28,6 +28,15 @@ export async function build() {
   await fs.cp(path.join(root, "src"), path.join(out, "src"), {
     recursive: true,
   });
+  // The public site is enquiry-led. Internal catalogue data and product photos
+  // stay in the working project but are deliberately excluded from deployment.
+  await Promise.all([
+    fs.rm(path.join(out, "assets", "products"), { recursive: true, force: true }),
+    fs.rm(path.join(out, "src", "catalogue.js"), { force: true }),
+    fs.rm(path.join(out, "src", "catalogue-products.js"), { force: true }),
+    fs.rm(path.join(out, "src", "domain.js"), { force: true }),
+    fs.rm(path.join(out, "src", "product-images.js"), { force: true }),
+  ]);
   for (const lang of ["hu", "en"])
     for (const route of routes) {
       const folder = path.join(out, lang, route);

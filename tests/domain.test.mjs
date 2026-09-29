@@ -11,8 +11,8 @@ import {
   safeCart,
   cartTotals,
   cartKey,
-  leadPayload,
 } from "../src/domain.js";
+import { newQuote as newLeadQuote, leadPayload } from "../src/site-data.js";
 import { renderPage, documentHTML } from "../src/render.js";
 import { routes } from "../scripts/build.mjs";
 import { products } from "../src/catalogue.js";
@@ -175,7 +175,7 @@ test("mixed quote keeps device-only lines and requires human review", () => {
 });
 
 test("generic callback request contains no invented product or automatic price", () => {
-  const q = newQuote();
+  const q = newLeadQuote();
   q.contact = { name: "Teszt", email: "", phone: "+36 30 000 0000", city: "Budapest", consent: true };
   q.roomCount = "2";
   const payload = leadPayload(q, "hu");
@@ -186,7 +186,7 @@ test("generic callback request contains no invented product or automatic price",
 });
 
 test("heat-pump callback always requires human technical review", () => {
-  const q = newQuote("hp");
+  const q = newLeadQuote("hp");
   q.interest = "hp";
   const payload = leadPayload(q, "hu");
   assert.equal(payload.interest, "hp");
@@ -215,21 +215,31 @@ test("contact details are available as working email and phone links", () => {
   assert.match(html, /tel:\+36706757028/);
 });
 
-test("public solution pages contain brands and starting prices without webshop controls", () => {
+test("public solution pages use brand-led enquiries without product pricing", () => {
   const html = renderPage("hu", "klimak").body;
-  assert.match(html, /MÁRKÁK ÉS INDULÓ ÁRAK/);
-  assert.match(html, /Készülékkel és alapszereléssel/);
+  assert.match(html, /MÁRKÁK, AMELYEKKEL DOLGOZUNK/);
   assert.ok(!html.includes("Kosárba"));
   assert.ok(!html.includes('data-action="cart"'));
+  assert.match(html, /assets\/brands\/gree\.svg/);
+  assert.match(html, /ajanlat\/\?brand=Gree/);
+  assert.match(html, /ajanlat\/\?need=quiet/);
+  assert.ok(!html.includes("Pulse Pro 3,5"));
+  assert.ok(!html.includes("Tájékoztató készülékár"));
+  assert.ok(!html.includes("Mutasd a lehetőségeket"));
+  assert.ok(!/>0[1-9]</.test(html));
   assert.equal(renderPage("hu", "klimak/gree-pulse-pro-35").notFound, true);
 });
 
-test("guided selector filters by sound level and reveals models with prices", () => {
-  const filters = { size: "30", mode: "both", noise: "silent", price: "low", tier: "rec", brand: "Hisense" };
-  assert.deepEqual(recommendations(filters).map((p) => p.id), ["hisense-eco-comfort-35"]);
+test("guided needs assessment collects criteria and continues to enquiry", () => {
+  const filters = { size: "30", room: "living", mode: "both", noise: "silent", budget: "balanced", brand: "Hisense" };
   const html = renderPage("hu", "valaszto", { selector: filters }).body;
-  assert.match(html, /Beltéri zajszint/);
+  assert.match(html, /Mennyire fontos a halk működés/);
+  assert.match(html, /Milyen helyiségbe kerül/);
   assert.match(html, /Hisense/);
-  assert.match(html, /Alapszereléssel/);
-  assert.match(html, /Erről kérek ajánlatot/);
+  assert.match(html, /Tovább az ajánlatkéréshez/);
+  assert.match(html, /2–3 megfelelő lehetőséget/);
+  assert.ok(!html.includes("Alapszereléssel"));
+  assert.ok(!html.includes("Pulse Pro"));
+  assert.ok(!html.includes('id="selector-results"'));
+  assert.ok(!/<legend><span>0[1-9]<\/span>/.test(html));
 });

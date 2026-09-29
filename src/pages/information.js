@@ -6,7 +6,7 @@ import {
   helpBanner,
   brandGallery,
 } from "../components.js";
-import { contactDetails } from "../domain.js";
+import { contactDetails } from "../site-data.js";
 export function information(c, path) {
   const titles = {
     telepites: c.t("Standard telepítés", "Standard installation"),

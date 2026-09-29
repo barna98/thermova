@@ -39,3 +39,17 @@ Edit this studio product concept. Preserve the air conditioner dimensions, camer
 ## Betűtípus
 
 Manrope 400–800 változó WOFF2, latin és latin-ext készlet. Forrás: Google Fonts. A letöltött állományok helyben vannak; böngészéskor nincs külső betűkérés. SIL Open Font License: `public/assets/fonts/OFL.txt`.
+
+## Márkalogók
+
+A klímaválasztóban szereplő gyártók logói helyi fájlokként találhatók a `public/assets/brands/` mappában. A színes forrásváltozatokat egységes, arculati grafit (`#1F2937`) megjelenésre alakítottuk; a formák és arányok változatlanok. A logók védjegyek, és kizárólag az adott gyártó azonosítására jelennek meg.
+
+- AUX: Wikimedia Commons, az AUX Group hivatalos forrására hivatkozó `Logo AUX Air Conditioner (China).svg`.
+- Daikin: Wikimedia Commons, a Daikin Industries hivatalos forrására hivatkozó `DAIKIN logo.svg`.
+- Gree: Wikimedia Commons, a Gree hivatalos forrására hivatkozó `Gree electric appliances logo.svg`.
+- Haier: Wikimedia Commons, `Haier logo.svg`.
+- Hisense: Wikimedia Commons, `Hisense logo.svg`.
+- TCL: Wikimedia Commons, a TCL Electronics hivatalos forrására hivatkozó `Logo of the TCL Corporation.svg`.
+- Tesla háztartási elektronika: a `tesla.info` hivatalos weboldalának fejléc-logója. Ez nem a Tesla autógyártó logója.
+
+A jelenlegi hőszivattyús katalógusban szereplő Nordiq, Valtek, Aeris és Sensa megnevezésekhez nincs a projektben hitelesen dokumentált gyártói logó. Ezek ezért átmenetileg egységes tipográfiai szójelként jelennek meg; valódi logóra csak a Thermova tényleges hőszivattyú-márkáinak véglegesítése után cserélhetők.

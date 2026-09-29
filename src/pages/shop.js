@@ -1,23 +1,20 @@
-import { products, heatpumps } from "../catalogue.js";
-import { config } from "../domain.js";
-import { arrow, breadcrumb, image, helpBanner, installBlock, sampleNotice } from "../components.js";
+import { config, climateBrands, heatPumpBrands } from "../site-data.js";
+import { arrow, breadcrumb, image, helpBanner, installBlock } from "../components.js";
 import { escape as e } from "../i18n.js";
-
-function summaries(items) {
-  return [...new Set(items.map((item) => item.brand))]
-    .map((brand) => {
-      const models = items.filter((item) => item.brand === brand);
-      return { brand, count: models.length, from: Math.min(...models.map((item) => item.price)) };
-    })
-    .sort((a, b) => a.brand.localeCompare(b.brand, "hu"));
-}
 
 function brandList(c, items, kind) {
   const ac = kind === "ac";
-  return `<div class="brand-service-list">${summaries(items).map((item) => `<article class="brand-service-row">
-    <div><span class="brand-monogram" aria-hidden="true">${e(item.brand.slice(0, 1))}</span><div><h3>${e(item.brand)}</h3><p>${item.count} ${c.t(ac ? "választható klímamodell" : "tervezhető rendszer", ac ? "available air conditioner models" : "system options")}</p></div></div>
-    <div class="brand-starting-price"><span>${c.t(ac ? "Készülékkel és alapszereléssel" : "Tájékoztató rendszerár", ac ? "Unit with standard installation" : "Indicative system price")}</span><strong>${c.t("már", "from")} ${c.money(item.from + (ac ? config.installationPrice : 0))}</strong></div>
-  </article>`).join("")}</div>`;
+  return `<div class="brand-logo-grid">${items.map((item) => {
+    const href = `${c.url(ac ? "ajanlat" : "rendszer-ajanlat")}?brand=${encodeURIComponent(item.name)}`;
+    const asset = item.asset;
+    const mark = asset
+      ? `<img src="/assets/brands/${asset}" alt="${e(item.name)}" loading="lazy" decoding="async">`
+      : `<span class="brand-wordmark">${e(item.name)}</span>`;
+    return `<a class="brand-logo-card brand-logo-card-simple" href="${href}" aria-label="${e(item.name)} – ${c.t("ajánlatkérés", "request a quote")}">
+      <span class="brand-logo-mark">${mark}</span>
+      <strong>${e(item.name)}</strong>
+    </a>`;
+  }).join("")}</div>`;
 }
 
 export function catalogue(c) {
@@ -30,15 +27,14 @@ export function catalogue(c) {
     </section>
     <section class="section choice-categories"><div class="section-head"><div><p class="eyebrow">${c.t("MIRE VAN SZÜKSÉGED?", "WHAT DO YOU NEED?")}</p><h2>${c.t("Könnyen érthető<br>választási szempontok.", "Clear criteria<br>for an easier choice.")}</h2></div></div>
       <div class="choice-category-grid">${[
-        ["01", c.t("Mindennapi hűtés", "Everyday cooling"), c.t("Megbízható komfort lakásba, házba vagy irodába.", "Reliable comfort for a flat, house or office.")],
-        ["02", c.t("Csendes klíma hálószobába", "Quiet AC for bedrooms"), c.t("Alacsony beltéri zajszinttel, nyugodt éjszakákhoz.", "Low indoor sound levels for restful nights.")],
-        ["03", c.t("Fűtésre is alkalmas", "Suitable for heating too"), c.t("Átmeneti időszakra vagy rendszeresebb téli használatra.", "For shoulder seasons or more regular winter use.")],
-        ["04", c.t("Prémium komfort", "Premium comfort"), c.t("Halk működés, jobb hatásfok és fejlettebb levegőkezelés.", "Quiet operation, higher efficiency and advanced air treatment.")],
-      ].map(([n, title, body]) => `<article><span>${n}</span><h3>${title}</h3><p>${body}</p></article>`).join("")}</div>
+        ["cooling", c.t("Mindennapi hűtés", "Everyday cooling"), c.t("Megbízható komfort lakásba, házba vagy irodába.", "Reliable comfort for a flat, house or office.")],
+        ["quiet", c.t("Csendes klíma hálószobába", "Quiet AC for bedrooms"), c.t("Alacsony beltéri zajszinttel, nyugodt éjszakákhoz.", "Low indoor sound levels for restful nights.")],
+        ["heating", c.t("Fűtésre is alkalmas", "Suitable for heating too"), c.t("Átmeneti időszakra vagy rendszeresebb téli használatra.", "For shoulder seasons or more regular winter use.")],
+        ["premium", c.t("Prémium komfort", "Premium comfort"), c.t("Halk működés, jobb hatásfok és fejlettebb levegőkezelés.", "Quiet operation, higher efficiency and advanced air treatment.")],
+      ].map(([need, title, body]) => `<a class="choice-category-card choice-category-card-simple" href="${c.url("ajanlat")}?need=${need}" aria-label="${title} – ${c.t("ajánlatkérés", "request a quote")}"><h3>${title}</h3><p>${body}</p></a>`).join("")}</div>
     </section>
-    <section class="section brand-offer"><div class="brand-offer-heading"><div><p class="eyebrow">${c.t("MÁRKÁK ÉS INDULÓ ÁRAK", "BRANDS AND STARTING PRICES")}</p><h2>${c.t("Több gyártó.<br>Egy szakmai szűrő.", "Several brands.<br>One professional filter.")}</h2></div><p>${c.t("Az induló ár az adott márka jelenlegi legkedvezőbb készülékárát és a 109 000 Ft-os standard telepítést tartalmazza.", "The starting price combines the brand’s current lowest unit price with standard installation at 109,000 HUF.")}</p></div>
-      ${brandList(c, products, "ac")}
-      ${sampleNotice(c)}
+    <section class="section brand-offer"><div class="brand-offer-heading"><div><p class="eyebrow">${c.t("MÁRKÁK, AMELYEKKEL DOLGOZUNK", "BRANDS WE WORK WITH")}</p><h2>${c.t("Több gyártó.<br>Egy szakmai szűrő.", "Several brands.<br>One professional filter.")}</h2></div><p>${c.t("Válassz márkát, ha van preferenciád. Az egyeztetés után 2–3, az igényeidhez és a helyiséghez illő lehetőséget küldünk.", "Choose a brand if you have a preference. After consultation, we send two or three options suited to your needs and room.")}</p></div>
+      ${brandList(c, climateBrands, "ac")}
     </section>
     <div class="help-section">${helpBanner(c)}</div>
     ${installBlock(c)}
@@ -55,14 +51,13 @@ export function hpCatalogue(c) {
     </section>
     <section class="section hp-process"><div class="section-head"><div><p class="eyebrow">${c.t("MIBŐL INDULUNK KI?", "WHAT DO WE CONSIDER?")}</p><h2>${c.t("Nem csak teljesítményt<br>választunk.", "We choose more<br>than capacity.")}</h2></div></div>
       <div class="choice-category-grid">${[
-        ["01", c.t("Új építés vagy korszerűsítés", "New build or renovation"), c.t("Más rendszer illik egy új, jól szigetelt házhoz és más egy meglévő épülethez.", "A new insulated home and an existing building need different systems.")],
-        ["02", c.t("Hőleadók és hőigény", "Emitters and heat demand"), c.t("Padlófűtés, radiátor vagy fan-coil alapján méretezünk.", "We size around underfloor heating, radiators or fan coils.")],
-        ["03", c.t("Fűtés, hűtés és melegvíz", "Heating, cooling and hot water"), c.t("A kívánt funkciókat egy rendszerben hangoljuk össze.", "We coordinate the required functions in one system.")],
-      ].map(([n, title, body]) => `<article><span>${n}</span><h3>${title}</h3><p>${body}</p></article>`).join("")}</div>
+        [c.t("Új építés vagy korszerűsítés", "New build or renovation"), c.t("Más rendszer illik egy új, jól szigetelt házhoz és más egy meglévő épülethez.", "A new insulated home and an existing building need different systems.")],
+        [c.t("Hőleadók és hőigény", "Emitters and heat demand"), c.t("Padlófűtés, radiátor vagy fan-coil alapján méretezünk.", "We size around underfloor heating, radiators or fan coils.")],
+        [c.t("Fűtés, hűtés és melegvíz", "Heating, cooling and hot water"), c.t("A kívánt funkciókat egy rendszerben hangoljuk össze.", "We coordinate the required functions in one system.")],
+      ].map(([title, body]) => `<article><h3>${title}</h3><p>${body}</p></article>`).join("")}</div>
     </section>
-    <section class="section brand-offer"><div class="brand-offer-heading"><div><p class="eyebrow">${c.t("RENDSZEREK ÉS INDULÓ ÁRAK", "SYSTEMS AND STARTING PRICES")}</p><h2>${c.t("Tájékozódási pont<br>a tervezés előtt.", "A starting point<br>before design.")}</h2></div><p>${c.t("Az összegek tájékoztató rendszerárak. A végleges műszaki tartalmat és árat minden esetben személyes egyeztetés és méretezés után adjuk meg.", "Prices are indicative system prices. Final scope and pricing always follow consultation and technical sizing.")}</p></div>
-      ${brandList(c, heatpumps, "hp")}
-      ${sampleNotice(c)}
+    <section class="section brand-offer"><div class="brand-offer-heading"><div><p class="eyebrow">${c.t("MÁRKÁK ÉS RENDSZERMEGOLDÁSOK", "BRANDS AND SYSTEM SOLUTIONS")}</p><h2>${c.t("A megfelelő rendszer<br>az épületből indul ki.", "The right system<br>starts with the building.")}</h2></div><p>${c.t("Válassz márkát, ha van preferenciád. A végleges rendszert és ajánlatot minden esetben személyes egyeztetés és műszaki méretezés után állítjuk össze.", "Choose a brand if you have a preference. We define the final system and quote after consultation and technical sizing.")}</p></div>
+      ${brandList(c, heatPumpBrands, "hp")}
     </section>
     <section class="help-banner"><div><p class="eyebrow">${c.t("ELSŐ LÉPÉS", "FIRST STEP")}</p><h2>${c.t("Néhány adatból<br>elindítjuk a tervezést.", "A few details<br>start the design process.")}</h2><p>${c.t("Add meg az épület alapterületét, a jelenlegi hőtermelőt, a hőleadókat és a kívánt funkciókat. Dokumentum feltöltése opcionális.", "Tell us the floor area, current heat source, emitters and required functions. Document upload is optional.")}</p></div><a class="button button-light" href="${c.url("rendszer-ajanlat")}">${c.t("Ajánlatot kérek", "Request a quote")} ${arrow}</a></section>
   </div>`;

@@ -1,4 +1,4 @@
-import { config } from "../domain.js";
+import { config } from "../site-data.js";
 import {
   arrow,
   image,
@@ -26,9 +26,9 @@ export function home(c) {
   <a class="category-path" href="${c.url("hoszivattyuk")}"><div><p class="eyebrow">${c.t("HŐSZIVATTYÚK", "HEAT PUMPS")}</p><h2>${c.t("Fűtés és hűtés<br>hőszivattyúval.", "Heating and cooling<br>with a heat pump.")}</h2><span>${c.t("Személyre szabott rendszertervezés", "System design tailored to you")} ${arrow}</span></div>${image("system", c.t("THERMOVA hőszivattyúrendszer látványkép", "THERMOVA heat pump system concept"), { small: true })}</a>
  </section>
  <section class="container section selection-section home-guidance">
-  ${sectionHead(c, c.t("NEM WEBSHOP, HANEM SZAKMAI SEGÍTSÉG", "GUIDANCE INSTEAD OF A WEBSHOP"), c.t("Előbb az igény.<br>Utána a készülék.", "Your needs first.<br>The unit comes next."), ["valaszto", c.t("Klímaválasztó", "AC finder")])}
-  <p class="section-intro">${c.t("Nem hagyunk egy hosszú terméklistával egyedül. A helyiség, a használat, a zajszint és a keret alapján mutatjuk meg a valóban szóba jöhető modelleket és áraikat.", "We do not leave you with a long product list. We show relevant models and prices based on the room, intended use, sound level and budget.")}</p>
-  <div class="home-guidance-grid"><div><strong>${c.t("6 gyakorlati szempont", "6 practical criteria")}</strong><span>${c.t("gyorsan kitölthető", "quick to complete")}</span></div><div><strong>${c.t("Legfeljebb 3 találat", "Up to 3 matches")}</strong><span>${c.t("összehasonlítható árakkal", "with comparable prices")}</span></div><div><strong>${c.t("Szakmai ellenőrzés", "Professional review")}</strong><span>${c.t("a végleges ajánlat előtt", "before the final quote")}</span></div></div>
+  ${sectionHead(c, c.t("SZEMÉLYESEN ÖSSZEÁLLÍTOTT AJÁNLAT", "A QUOTE PREPARED FOR YOU"), c.t("Előbb az igény.<br>Utána az ajánlat.", "Your needs first.<br>Your quote follows."), ["valaszto", c.t("Segítsetek választani", "Help me choose")])}
+  <p class="section-intro">${c.t("Néhány kérdésből megismerjük az igényeidet, telefonon pontosítjuk a részleteket, majd 2–3 megfelelő lehetőséget küldünk.", "A few questions help us understand your needs, we confirm the details by phone, then send two or three suitable options.")}</p>
+  <div class="home-guidance-grid"><div><strong>${c.t("Rövid igényfelmérés", "Short needs assessment")}</strong><span>${c.t("helyiség, használat és zajszint", "room, use and noise preference")}</span></div><div><strong>${c.t("Személyes egyeztetés", "Personal consultation")}</strong><span>${c.t("telefonon pontosítjuk a részleteket", "we confirm the details by phone")}</span></div><div><strong>${c.t("2–3 megfelelő lehetőség", "Two or three suitable options")}</strong><span>${c.t("a végleges ajánlatban", "in your final quote")}</span></div></div>
   <a class="button" href="${c.url("valaszto")}">${c.t("Segítsetek választani", "Help me choose")} ${arrow}</a>
  </section>
  <div class="container">${livingStory(c)}</div>

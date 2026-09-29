@@ -7,7 +7,7 @@ import {
 } from "./pages/shop.js";
 import { selector, quotePage } from "./pages/forms.js";
 import { information } from "./pages/information.js";
-import { config, newQuote } from "./domain.js";
+import { config, newQuote } from "./site-data.js";
 export function parseRoute(pathname) {
   const parts = pathname.split("/").filter(Boolean);
   const lang = parts[0] === "en" ? "en" : "hu";

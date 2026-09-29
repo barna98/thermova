@@ -1,7 +1,6 @@
 import { locale } from "./i18n.js";
 import { parseRoute, renderPage } from "./render.js";
-import { product, system, newQuote, leadPayload, config } from "./domain.js";
-import { selectorResults } from "./pages/forms.js";
+import { newQuote, leadPayload, config, climateBrands } from "./site-data.js";
 import { icon, arrow } from "./components.js";
 
 const state = { selector: null, quote: null };
@@ -14,13 +13,51 @@ function loadRoute() {
   route = parseRoute(location.pathname);
   c = locale(route.lang);
   const params = new URLSearchParams(location.search);
+  if (route.path === "valaszto") {
+    const brand = params.get("brand");
+    if (brand && climateBrands.some((item) => item.name === brand)) {
+      state.selector = { brand };
+    }
+  }
   if (["ajanlat", "rendszer-ajanlat"].includes(route.path)) {
     const kind = route.path === "rendszer-ajanlat" ? "hp" : "ac";
-    const seed = params.get("product");
-    const validSeed = kind === "hp" ? (system(seed) ? seed : null) : (product(seed) ? seed : null);
-    if (!state.quote || state.quote.kind !== kind || state.quote.seed !== validSeed) {
+    const brand = params.get("brand");
+    const need = params.get("need");
+    const selectorKeys = ["size", "room", "mode", "noise", "budget", "brand"];
+    const contextKey = [brand || "", need || "", params.get("source") || "", ...selectorKeys.map((key) => params.get(key) || "")].join(":");
+    const validSeed = null;
+    if (!state.quote || state.quote.kind !== kind || state.quote.seed !== validSeed || state.quote.contextKey !== contextKey) {
       state.quote = newQuote(kind, validSeed);
       state.quote.seed = validSeed;
+      state.quote.contextKey = contextKey;
+      const needs = {
+        cooling: c.t("Mindennapi hűtéshez kérek ajánlatot.", "I would like a quote for everyday cooling."),
+        quiet: c.t("Csendes, hálószobába való klímához kérek ajánlatot.", "I would like a quote for a quiet bedroom air conditioner."),
+        heating: c.t("Fűtésre is alkalmas klímához kérek ajánlatot.", "I would like a quote for an air conditioner suitable for heating."),
+        premium: c.t("Prémium komfortot adó klímához kérek ajánlatot.", "I would like a quote for a premium-comfort air conditioner."),
+      };
+      if (need && needs[need]) state.quote.note = needs[need];
+      if (brand) state.quote.note = kind === "hp"
+        ? c.t(`${brand} hőszivattyús rendszer érdekel.`, `I am interested in a ${brand} heat-pump system.`)
+        : c.t(`${brand} klíma érdekel.`, `I am interested in ${brand} air conditioning.`);
+      if (params.get("source") === "selector" && kind === "ac") {
+        const labels = {
+          size: { "15": "10–18 m²", "22": "18–25 m²", "30": "25–35 m²", "42": "35–50 m²" },
+          room: { bedroom: c.t("hálószoba", "bedroom"), living: c.t("nappali", "living room"), office: c.t("iroda vagy üzlet", "office or shop"), other: c.t("más helyiség", "other room") },
+          mode: { cool: c.t("hűtés", "cooling"), both: c.t("hűtés és fűtés", "cooling and heating"), heat: c.t("elsősorban fűtés", "mainly heating") },
+          noise: { silent: c.t("nagyon halk működés", "very quiet operation"), quiet: c.t("halk működés", "quiet operation"), any: c.t("nem elsődleges", "not a priority") },
+          budget: { value: c.t("kedvezőbb alapmegoldás", "more affordable solution"), balanced: c.t("kiegyensúlyozott ár és tudás", "balanced price and features"), premium: c.t("prémium komfort", "premium comfort"), open: c.t("nyitott a javaslatra", "open to recommendations") },
+        };
+        const rows = [
+          [c.t("Helyiségméret", "Room size"), labels.size[params.get("size")]],
+          [c.t("Helyiség", "Room"), labels.room[params.get("room")]],
+          [c.t("Használat", "Use"), labels.mode[params.get("mode")]],
+          [c.t("Zajszint", "Noise preference"), labels.noise[params.get("noise")]],
+          [c.t("Megoldás szintje", "Solution level"), labels.budget[params.get("budget")]],
+          [c.t("Márkapreferencia", "Brand preference"), brand || c.t("nincs", "none")],
+        ].filter(([, value]) => value);
+        state.quote.note = `${c.t("Klímaigény-felmérés", "Air-conditioning needs assessment")}\n${rows.map(([label, value]) => `${label}: ${value}`).join("\n")}`;
+      }
     }
     if (params.get("service") === "consultation" && !state.quote.note) {
       state.quote.note = c.t("Karbantartás vagy egyedi kérdés – részletek: ", "Maintenance or individual enquiry – details: ");
@@ -56,7 +93,7 @@ function navigate(url) {
 
 function initMotion() {
   motionObserver?.disconnect();
-  const targets = document.querySelectorAll(".section-head, .category-path, .living-story, .help-banner, .split-editorial, .installation, .brand-story-heading, .brand-photo, .closing-statement, .service-hero > *, .choice-category-grid > *, .brand-service-row, .selector-form fieldset, .recommendation-card, .home-guidance-grid > *, .principles > *");
+  const targets = document.querySelectorAll(".section-head, .category-path, .living-story, .help-banner, .split-editorial, .installation, .brand-story-heading, .brand-photo, .closing-statement, .service-hero > *, .choice-category-grid > *, .brand-logo-card, .selector-form fieldset, .recommendation-card, .home-guidance-grid > *, .principles > *");
   targets.forEach((element, index) => {
     element.classList.add("reveal");
     element.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 70}ms`);
@@ -169,12 +206,11 @@ document.addEventListener("submit", async (event) => {
   const form = event.target;
   if (form.id === "selector-form") {
     event.preventDefault();
+    if (!form.reportValidity()) return;
     state.selector = Object.fromEntries(new FormData(form));
-    const results = document.querySelector("#selector-results");
-    results.innerHTML = selectorResults(c, state.selector);
-    initMotion();
-    results.scrollIntoView({ block: "start" });
-    results.focus({ preventScroll: true });
+    const params = new URLSearchParams({ source: "selector", ...state.selector });
+    if (!state.selector.brand) params.delete("brand");
+    navigate(`${c.url("ajanlat")}?${params.toString()}`);
     return;
   }
   if (form.id !== "quote-form") return;
