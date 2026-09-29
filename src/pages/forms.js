@@ -6,56 +6,38 @@ import {
   recommendations,
 } from "../domain.js";
 import { escape as e, modes } from "../i18n.js";
+import { products } from "../catalogue.js";
 import {
   arrow,
   field,
   breadcrumb,
-  productCard,
+  recommendationCard,
   sampleNotice,
   icon,
 } from "../components.js";
 export function selector(c, filters = null) {
-  return `<div class="container narrow">${breadcrumb(c, [[c.t("Klímaválasztó", "AC finder")]])}<section class="page-intro"><p class="eyebrow">${c.t("KLÍMAVÁLASZTÓ", "AC FINDER")}</p><h1>${c.t("Segítünk<br>klímát választani.", "Find the right<br>air conditioner.")}</h1><p>${c.t("Három kérdés. Csak azokat a modelleket mutatjuk, amelyek megfelelnek a válaszaidnak.", "Three questions. We’ll only show models that match your answers.")}</p></section><form id="selector-form" class="selector-form">${[
-    [
-      "size",
-      c.t("Mekkora a helyiség?", "How large is your room?"),
-      [
-        ["15", c.t("10–18 m² · Kis szoba", "10–18 m² · Small room")],
-        ["22", "18–25 m²"],
-        ["30", "25–35 m²"],
-        ["42", "35–50 m²"],
-      ],
-    ],
-    [
-      "mode",
-      c.t("Mire használnád?", "What will you use it for?"),
-      Object.entries(modes).map(([k, v]) => [k, c.t(...v)]),
-    ],
-    [
-      "price",
-      c.t(
-        "Mekkora a készülékre szánt keret?",
-        "What is your budget for the unit?",
-      ),
-      [
-        ["low", c.t("250 000 Ft alatt", "Under 250,000 HUF")],
-        ["mid", "250 000–400 000 " + c.t("Ft", "HUF")],
-        ["high", c.t("400 000 Ft felett", "Over 400,000 HUF")],
-      ],
-    ],
-  ]
-    .map(
-      ([name, title, opts], i) =>
-        `<fieldset><legend>${title}</legend><div class="option-grid">${opts.map(([v, l]) => `<label class="option"><input type="radio" name="${name}" value="${v}" required ${filters?.[name] === v ? "checked" : ""}><span>${l}</span></label>`).join("")}</div></fieldset>`,
-    )
-    .join(
-      "",
-    )}<button class="button" type="submit">${c.t("Mutassátok a lehetőségeket", "Show my options")} ${arrow}</button><p class="small">${c.t("Az ajánlás tájékoztató. Az épület adottságai befolyásolják a méretezést.", "Recommendations are indicative. Building conditions affect sizing.")}</p></form></div><section id="selector-results" class="container section" tabindex="-1">${filters ? selectorResults(c, filters) : ""}</section>`;
+  const brands = ["", ...new Set(products.map((p) => p.brand))];
+  const questions = [
+    ["size", c.t("Mekkora a helyiség?", "How large is the room?"), [["15", c.t("10–18 m² · kis szoba", "10–18 m² · small room")], ["22", "18–25 m²"], ["30", "25–35 m²"], ["42", "35–50 m²"]]],
+    ["mode", c.t("Mire használnád?", "How will you use it?"), Object.entries(modes).map(([key, value]) => [key, c.t(...value)])],
+    ["noise", c.t("Mennyire fontos a halk működés?", "How important is quiet operation?"), [["silent", c.t("Nagyon fontos · hálószobába", "Very important · bedroom")], ["quiet", c.t("Fontos · legfeljebb 25 dB(A)", "Important · up to 25 dB(A)")], ["any", c.t("Nem elsődleges szempont", "Not a priority")]]],
+    ["price", c.t("Mekkora a készülékre szánt keret?", "What is your budget for the unit?"), [["low", c.t("250 000 Ft alatt", "Under 250,000 HUF")], ["mid", "250 000–400 000 " + c.t("Ft", "HUF")], ["high", c.t("400 000 Ft felett", "Over 400,000 HUF")]]],
+    ["tier", c.t("Milyen szintű megoldást keresel?", "What level of solution are you looking for?"), [["any", c.t("Nyitott vagyok a javaslatra", "I am open to recommendations")], ["value", c.t("Kedvező árú, jó alapfunkciókkal", "Good value with the essentials")], ["rec", c.t("Kiegyensúlyozott ár és tudás", "Balanced price and features")], ["premium", c.t("Prémium komfort és hatásfok", "Premium comfort and efficiency")]]],
+  ];
+  return `<div class="container selector-shell">${breadcrumb(c, [[c.t("Klímaválasztó", "AC finder")]])}
+    <section class="selector-intro page-intro"><div><p class="eyebrow">${c.t("SZEMÉLYRE SZABOTT KLÍMAVÁLASZTÓ", "PERSONALISED AC FINDER")}</p><h1>${c.t("Kevesebb keresgélés.<br>Jobb találatok.", "Less browsing.<br>Better matches.")}</h1><p>${c.t("Válaszolj néhány gyakorlati kérdésre. A végén legfeljebb három olyan készüléket mutatunk, amely megfelel a megadott szempontoknak, tájékoztató árakkal.", "Answer a few practical questions. We then show up to three units that match your criteria, with indicative prices.")}</p></div><div class="selector-promise"><strong>${c.t("Mit veszünk figyelembe?", "What do we consider?")}</strong><span>${c.t("helyiségméret", "room size")}</span><span>${c.t("hűtés vagy fűtés", "cooling or heating")}</span><span>${c.t("beltéri zajszint", "indoor sound level")}</span><span>${c.t("ár és felszereltség", "price and features")}</span></div></section>
+    <form id="selector-form" class="selector-form selector-form-expanded">${questions.map(([name, title, options], index) => `<fieldset><legend><span>${String(index + 1).padStart(2, "0")}</span>${title}</legend><div class="option-grid">${options.map(([value, label]) => `<label class="option"><input type="radio" name="${name}" value="${value}" required ${filters?.[name] === value ? "checked" : ""}><span>${label}</span></label>`).join("")}</div></fieldset>`).join("")}
+      <fieldset><legend><span>06</span>${c.t("Van preferált márkád?", "Do you prefer a brand?")}</legend><label class="field selector-brand"><select name="brand"><option value="">${c.t("Nincs márkapreferenciám", "No brand preference")}</option>${brands.filter(Boolean).map((brand) => `<option value="${e(brand)}" ${filters?.brand === brand ? "selected" : ""}>${e(brand)}</option>`).join("")}</select></label></fieldset>
+      <div class="selector-submit"><button class="button" type="submit">${c.t("Mutassátok a lehetőségeket", "Show my options")} ${arrow}</button><p>${c.t("Az ajánlás tájékoztató. A végleges méretezést a helyszín adottságai alapján ellenőrizzük.", "Recommendations are indicative. Final sizing is checked against site conditions.")}</p></div>
+    </form></div><section id="selector-results" class="container section selector-results" tabindex="-1">${filters ? selectorResults(c, filters) : ""}</section>`;
 }
+
+
 export function selectorResults(c, filters) {
   const list = recommendations(filters);
-  return `<p class="eyebrow">${c.t("A VÁLASZAID ALAPJÁN", "BASED ON YOUR ANSWERS")}</p><h2>${list.length ? c.t("A feltételeknek megfelelő klímák", "Air conditioners matching your requirements") : c.t("Nem találtunk megfelelő klímát.", "No matching air conditioner found.")}</h2>${list.length ? `<div class="product-grid">${list.map((p) => productCard(c, p)).join("")}</div>${sampleNotice(c)}` : `<p>${c.t("Nincs minden feltételnek megfelelő modell. Nem ajánlunk helyette rosszul méretezett készüléket.", "There is no model matching every requirement. We won’t suggest an incorrectly sized unit instead.")}</p><a class="button" href="${c.url("ajanlat")}">${c.t("Egyedi segítséget kérek", "Ask for individual advice")} ${arrow}</a>`}`;
+  return `<div class="results-heading"><div><p class="eyebrow">${c.t("A VÁLASZAID ALAPJÁN", "BASED ON YOUR ANSWERS")}</p><h2>${list.length ? c.t("Ezek illenek legjobban az igényeidhez.", "These best match your needs.") : c.t("Nincs minden feltételnek megfelelő modell.", "No model matches every criterion.")}</h2></div>${list.length ? `<p>${c.t("Az árak tájékoztató jellegűek, a végleges ajánlatot az egyeztetés után adjuk.", "Prices are indicative; the final quote follows consultation.")}</p>` : ""}</div>${list.length ? `<div class="recommendation-grid">${list.map((p) => recommendationCard(c, p)).join("")}</div>${sampleNotice(c)}` : `<div class="empty-state"><p>${c.t("Nem lazítjuk automatikusan a fontos feltételeidet. Kérj személyes segítséget, és együtt megtaláljuk a megfelelő megoldást.", "We do not automatically relax your important requirements. Ask for personal guidance and we will find the right solution together.")}</p><a class="button" href="${c.url("ajanlat")}">${c.t("Személyes segítséget kérek", "Ask for personal guidance")} ${arrow}</a></div>`}`;
 }
+
 // The enquiry is a callback lead. Technical sizing and pricing follow consultation.
 export function quotePage(c, q) {
   const hp = q.interest === "hp";

@@ -1,7 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { products, heatpumps } from "../src/catalogue.js";
 import { documentHTML } from "../src/render.js";
 export const root = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -14,18 +13,16 @@ export const routes = [
   "valaszto",
   "ajanlat",
   "rendszer-ajanlat",
-  "keszulekigeny",
   "telepites",
   "szolgaltatasok",
   "rolunk",
   "tudastar",
   "kapcsolat",
   "adatkezeles",
-  ...products.map((p) => "klimak/" + p.id),
-  ...heatpumps.map((p) => "hoszivattyuk/" + p.id),
 ];
 export async function build() {
   const out = path.join(root, "dist");
+  await fs.rm(out, { recursive: true, force: true });
   await fs.mkdir(out, { recursive: true });
   await fs.cp(path.join(root, "public"), out, { recursive: true });
   await fs.cp(path.join(root, "src"), path.join(out, "src"), {
@@ -55,8 +52,6 @@ export async function build() {
     "rolunk",
     "tudastar",
     "kapcsolat",
-    ...products.map((p) => "klimak/" + p.id),
-    ...heatpumps.map((p) => "hoszivattyuk/" + p.id),
   ];
   const sitemapUrls = ["hu", "en"].flatMap((lang) =>
     publicRoutes.map(

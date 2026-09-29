@@ -3,13 +3,11 @@ import { locale, escape as e } from "./i18n.js";
 import { header, footer } from "./components.js";
 import {
   catalogue,
-  productPage,
   hpCatalogue,
-  hpProduct,
 } from "./pages/shop.js";
 import { selector, quotePage } from "./pages/forms.js";
 import { information } from "./pages/information.js";
-import { config, newQuote, product, system } from "./domain.js";
+import { config, newQuote } from "./domain.js";
 export function parseRoute(pathname) {
   const parts = pathname.split("/").filter(Boolean);
   const lang = parts[0] === "en" ? "en" : "hu";
@@ -27,36 +25,26 @@ export function renderPage(lang, path = "", state = {}) {
       "Air conditioning and heat pumps, with expertise",
     );
   } else if (base === "klimak") {
-    html = id
-      ? productPage(c, id, state.purchaseOptions?.[id] ?? true)
-      : catalogue(c, state.filters);
-    title = id
-      ? `${product(id)?.brand || ""} ${product(id)?.name || ""}`
-      : c.t(
+    html = id ? null : catalogue(c);
+    title = id ? "404" : c.t(
           "Klímák, átlátható telepítési árakkal",
           "Air conditioners with clear installation pricing",
         );
   } else if (base === "hoszivattyuk") {
-    html = id ? hpProduct(c, id) : hpCatalogue(c);
-    title = id
-      ? `${system(id)?.brand || ""} ${system(id)?.name || ""}`
-      : c.t("Hőszivattyúrendszerek", "Heat pump systems");
+    html = id ? null : hpCatalogue(c);
+    title = id ? "404" : c.t("Hőszivattyúrendszerek", "Heat pump systems");
   } else if (base === "valaszto") {
     html = selector(c, state.selector);
     title = c.t(
-      "Klímaválasztó három kérdésben",
-      "Find your AC in three questions",
+      "Személyre szabott klímaválasztó",
+      "Personalised AC finder",
     );
-  } else if (["ajanlat", "rendszer-ajanlat", "keszulekigeny"].includes(base)) {
+  } else if (["ajanlat", "rendszer-ajanlat"].includes(base)) {
     html = quotePage(
       c,
       state.quote ||
         newQuote(
-          base === "rendszer-ajanlat"
-            ? "hp"
-            : base === "keszulekigeny"
-              ? "device"
-              : "ac",
+          base === "rendszer-ajanlat" ? "hp" : "ac",
         ),
     );
     title = c.t("Ajánlatkérés", "Request a quote");
@@ -98,6 +86,8 @@ export function documentHTML(lang, path, state = {}) {
     : `${origin}/${lang}/${route}`;
   const indexable = [
     "",
+    "klimak",
+    "hoszivattyuk",
     "telepites",
     "szolgaltatasok",
     "rolunk",
@@ -108,5 +98,5 @@ export function documentHTML(lang, path, state = {}) {
   const alternates = page.notFound
     ? ""
     : `<link rel="alternate" hreflang="hu" href="${origin}/hu/${route}"><link rel="alternate" hreflang="en" href="${origin}/en/${route}"><link rel="alternate" hreflang="x-default" href="${origin}/hu/${route}">`;
-  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><title>${e(page.title)}</title><meta name="description" content="${e(page.description)}"><meta name="robots" content="${robots}"><link rel="canonical" href="${canonical}"><meta property="og:title" content="${e(page.title)}"><meta property="og:description" content="${e(page.description)}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${origin}/assets/architecture.webp">${alternates}<link rel="icon" href="/assets/mark.svg" type="image/svg+xml"><link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/brand.css">${!path ? '<link rel="preload" as="image" href="/assets/architecture.webp">' : ""}<script type="module" src="/src/app.js"></script></head><body>${page.body}<noscript><p class="noscript">${lang === "hu" ? "Az ajánlatkéréshez és a kosárhoz JavaScript szükséges. A termékoldalak továbbra is olvashatók." : "Quote requests and the bag require JavaScript. Product pages remain readable."}</p></noscript></body></html>`;
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><title>${e(page.title)}</title><meta name="description" content="${e(page.description)}"><meta name="robots" content="${robots}"><link rel="canonical" href="${canonical}"><meta property="og:title" content="${e(page.title)}"><meta property="og:description" content="${e(page.description)}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${origin}/assets/architecture.webp">${alternates}<link rel="icon" href="/assets/mark.svg" type="image/svg+xml"><link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/brand.css">${!path ? '<link rel="preload" as="image" href="/assets/architecture.webp">' : ""}<script type="module" src="/src/app.js"></script></head><body>${page.body}<noscript><p class="noscript">${lang === "hu" ? "A személyre szabott klímaválasztó és az ajánlatkérés használatához JavaScript szükséges." : "JavaScript is required for the personalised AC finder and quote request."}</p></noscript></body></html>`;
 }

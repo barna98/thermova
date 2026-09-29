@@ -1,10 +1,8 @@
-import { product, config } from "../domain.js";
+import { config } from "../domain.js";
 import {
   arrow,
   image,
   sectionHead,
-  productCard,
-  sampleNotice,
   installBlock,
   helpBanner,
   brandGallery,
@@ -27,11 +25,11 @@ export function home(c) {
   <a class="category-path" href="${c.url("klimak")}"><div><p class="eyebrow">${c.t("KLÍMÁK", "AIR CONDITIONING")}</p><h2>${c.t("Klímák hűtésre<br>és fűtésre.", "Air conditioning<br>for cooling and heating.")}</h2><span>${c.t("Készülék és telepítés egy helyen", "Your unit and installation in one place")} ${arrow}</span></div>${image("climate", c.t("THERMOVA klíma látványkép", "THERMOVA air conditioner concept"), { small: true })}</a>
   <a class="category-path" href="${c.url("hoszivattyuk")}"><div><p class="eyebrow">${c.t("HŐSZIVATTYÚK", "HEAT PUMPS")}</p><h2>${c.t("Fűtés és hűtés<br>hőszivattyúval.", "Heating and cooling<br>with a heat pump.")}</h2><span>${c.t("Személyre szabott rendszertervezés", "System design tailored to you")} ${arrow}</span></div>${image("system", c.t("THERMOVA hőszivattyúrendszer látványkép", "THERMOVA heat pump system concept"), { small: true })}</a>
  </section>
- <section class="container section selection-section">
-  ${sectionHead(c, c.t("KLÍMAKÍNÁLATUNK", "OUR AIR CONDITIONERS"), c.t("Klímák, összehasonlítható árakkal.", "Air conditioners with clear pricing."), ["klimak", c.t("Összes klíma", "All air conditioners")])}
-  <p class="section-intro">${c.t("Nézd meg, mekkora helyiséghez ajánljuk a készüléket, és mennyibe kerül önmagában vagy alapszereléssel.", "Compare recommended room sizes and prices, with or without standard installation.")}</p>
-  <div class="product-grid">${["gree-pulse-pro-35", "gree-comfort-pro-35", "daikin-comfora-35"].map((id) => productCard(c, product(id))).join("")}</div>
-  ${sampleNotice(c)}
+ <section class="container section selection-section home-guidance">
+  ${sectionHead(c, c.t("NEM WEBSHOP, HANEM SZAKMAI SEGÍTSÉG", "GUIDANCE INSTEAD OF A WEBSHOP"), c.t("Előbb az igény.<br>Utána a készülék.", "Your needs first.<br>The unit comes next."), ["valaszto", c.t("Klímaválasztó", "AC finder")])}
+  <p class="section-intro">${c.t("Nem hagyunk egy hosszú terméklistával egyedül. A helyiség, a használat, a zajszint és a keret alapján mutatjuk meg a valóban szóba jöhető modelleket és áraikat.", "We do not leave you with a long product list. We show relevant models and prices based on the room, intended use, sound level and budget.")}</p>
+  <div class="home-guidance-grid"><div><strong>${c.t("6 gyakorlati szempont", "6 practical criteria")}</strong><span>${c.t("gyorsan kitölthető", "quick to complete")}</span></div><div><strong>${c.t("Legfeljebb 3 találat", "Up to 3 matches")}</strong><span>${c.t("összehasonlítható árakkal", "with comparable prices")}</span></div><div><strong>${c.t("Szakmai ellenőrzés", "Professional review")}</strong><span>${c.t("a végleges ajánlat előtt", "before the final quote")}</span></div></div>
+  <a class="button" href="${c.url("valaszto")}">${c.t("Segítsetek választani", "Help me choose")} ${arrow}</a>
  </section>
  <div class="container">${livingStory(c)}</div>
  <div class="container help-section">${helpBanner(c)}</div>

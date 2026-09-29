@@ -215,10 +215,21 @@ test("contact details are available as working email and phone links", () => {
   assert.match(html, /tel:\+36706757028/);
 });
 
-test("product badges only use measurable catalogue attributes", () => {
+test("public solution pages contain brands and starting prices without webshop controls", () => {
   const html = renderPage("hu", "klimak").body;
-  assert.ok(!html.includes("Thermova ajánlja"));
-  assert.ok(!html.includes("Prémium választás"));
-  assert.ok(!html.includes("Kedvező ár"));
-  assert.match(html, /(Wi-Fi vezérlés|Akár [0-9]+ dB\(A\)|energiaosztály|Fűtésre is ajánljuk)/);
+  assert.match(html, /MÁRKÁK ÉS INDULÓ ÁRAK/);
+  assert.match(html, /Készülékkel és alapszereléssel/);
+  assert.ok(!html.includes("Kosárba"));
+  assert.ok(!html.includes('data-action="cart"'));
+  assert.equal(renderPage("hu", "klimak/gree-pulse-pro-35").notFound, true);
+});
+
+test("guided selector filters by sound level and reveals models with prices", () => {
+  const filters = { size: "30", mode: "both", noise: "silent", price: "low", tier: "rec", brand: "Hisense" };
+  assert.deepEqual(recommendations(filters).map((p) => p.id), ["hisense-eco-comfort-35"]);
+  const html = renderPage("hu", "valaszto", { selector: filters }).body;
+  assert.match(html, /Beltéri zajszint/);
+  assert.match(html, /Hisense/);
+  assert.match(html, /Alapszereléssel/);
+  assert.match(html, /Erről kérek ajánlatot/);
 });

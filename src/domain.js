@@ -24,6 +24,11 @@ export function filterProducts(filters = {}) {
         (filters.mode === "both" && p.mode !== "cool") ||
         (filters.mode === "heat" && p.mode === "heat")) &&
       (!filters.brand || p.brand === filters.brand) &&
+      (!filters.noise ||
+        (filters.noise === "silent" && p.db <= 20) ||
+        (filters.noise === "quiet" && p.db <= 25) ||
+        filters.noise === "any") &&
+      (!filters.tier || filters.tier === "any" || p.tier === filters.tier) &&
       (!filters.price ||
         (filters.price === "low"
           ? p.price < 250000
