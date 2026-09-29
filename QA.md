@@ -2,50 +2,35 @@
 
 ## Automatizált ellenőrzés
 
-`npm test`: 19/19 sikeres teszt.
+`npm test`: 20/20 sikeres teszt.
 
-- Standard telepítés 109 000 Ft; több készülék összegei helyesek.
-- Összetett szűrés: méret, használat, ár, márka.
+- Standard telepítés: 109 000 Ft.
+- Összetett szűrés: méret, használat, ár, márka, zajszint és felszereltségi szint.
 - Numerikus rendezés; nincs a megadott feltételeket megsértő ajánlás.
 - Több klíma és minden hőszivattyú esetén emberi ellenőrzés.
-- Hibás kosáradatok kizárása, régi kosáradatok biztonságos migrációja.
-- Duplikált kosárváltozatok összevonása, legfeljebb 20 darabig.
-- Egyetlen, szerelés nélküli készülékigény nem kap téves telepítési felülvizsgálatot.
-- Minden magyar és angol útvonal renderelhető, pontosan egy h1 címsorral.
-- Nem létező termék: 404. Üres kosárból nyitott készülékigény nem okoz renderelési hibát.
+- Minden magyar és angol nyilvános útvonal renderelhető, pontosan egy h1 címsorral.
+- A korábbi termékútvonalak 404-et adnak, és a statikus build nem hozza létre őket.
 - Felhasználói szöveg és fájlnév HTML-escape; fájlmező opcionális.
-- Vegyes kosár: csak a telepítést kérő változatokhoz számolunk szerelési díjat.
-- Vegyes ajánlatban megmaradnak a szerelés nélküli készülékek; 2+ készüléknél emberi ellenőrzés szükséges.
+- A nyilvános klíma- és hőszivattyúoldal márkákat és induló árakat mutat, kosarat és termékrácsot nem.
+- A klímaválasztó zajszint alapján is szűr, és legfeljebb három árazott modellt jelenít meg.
 
-`npm run build`: 79 statikus oldal létrejön.
+`npm run build`: 25 statikus oldal létrejön.
 
 ## Böngészős ellenőrzés
 
-Codex böngésző, külön localhost tesztpéldányon, kizárólag tesztadatokkal.
-
-- Klímaszűrés: 25–35 m² és elsődleges fűtés → Nordic 35.
-- Szerelés nélkül kiválasztott Comfort 35: 329 900 Ft; a kosárban 0 Ft szerelés.
-- Ugyanaz a Comfort 35 szereléssel és anélkül: két külön kosársor, 659 800 Ft készülék + 109 000 Ft szerelés = 768 800 Ft.
-- Vegyes kosár továbbadása: egy szerelendő helyiség, egy további szerelés nélküli készülék; az összeg változatlan.
+- A klímaoldalon felhasználási kategóriák, márkák és standard telepítéssel növelt induló árak jelennek meg; termékrács, kereső és kosár nem.
+- A hőszivattyúoldal rendszerként kezeli a megoldást, márkánként tájékoztató induló árat mutat, és minden projektnél műszaki ellenőrzést jelez.
+- A klímaválasztó kitöltés előtt nem mutat modellt. A hat szempont megadása után legfeljebb három találat jelenik meg készülékárral és alapszereléssel számolt árral.
+- Túl szigorú, találat nélküli feltételeknél a felület személyes segítséget ajánl, és nem lazítja fel rejtetten a szűrést.
 - Az egyoldalas visszahíváskérőn a klíma/hőszivattyú választás, az opcionális helyiségszám és terület, valamint a kötelező kapcsolati adatok működnek.
 - A név, email, telefonszám, település és adatkezelési hozzájárulás kötelező; hibás email címmel az űrlap nem küldhető tovább.
 - Bekötött fogadó végpont nélkül az összefoglaló egyértelműen jelzi, hogy nem történt adatküldés vagy visszahíváskérés.
 - A lead-adatcsomag nem tartalmaz automatikus árat vagy nem választott alapértelmezett készüléket; két vagy több klímánál és minden hőszivattyúnál emberi ellenőrzést kér.
-- Mobil termékoldal: a változatváltást követi a rögzített kosárgomb felirata és ára.
-- Főoldal, angol klímakategória, klímatermékoldal és hőszivattyús ajánlatkérés: 320, 768 és 1440 px szélességen nincs vízszintes túlcsordulás.
-- Asztali és 390 px mobil képi ellenőrzés: eredeti logó, hero, termék- és vásárlási felület; eredeti termékfotók egységes világos felületen, narancssárga ajánlási címkékkel és felirat nélkül.
-- A landing hero 1440 és 390 px szélességen ellenőrizve: nincs fejléc alatti üres sáv vagy vízszintes túlcsordulás; a főcím sorai, az ékezetek, a leírás, a CTA-k és az alsó információ között következetes térköz marad.
-- A hero 1728 px-es asztali nézetben pontosan a viewport teljes szélességét használja; a két megoldáskártya képe a kártyán belül marad és teljes egészében látszik.
-- A hero mindkét termékkategóriához közvetlen CTA-t ad, a nem kattintható képfelirat eltűnt, a dekoratív sorszámozás nem jelenik meg a navigációban és a tartalmi blokkokban.
-- A kapcsolat oldalon és a footerben kattintható email- és telefonszámhivatkozások jelennek meg; mobilnézetben sem rejtjük el őket.
-- A termékcímkék kizárólag katalógusadatból képzett, ellenőrizhető tulajdonságot mutatnak: fűtési ajánlás, minimum zajszint, Wi-Fi vagy energiaosztály.
-- 390 px mobilmenü: panelanimáció, sorszámozott navigáció, stabil kör alakú bezárógomb és fókusz-visszaadás.
-- A karakteres CTA-nyilak és pipák helyett egységes SVG/CSS jelek jelennek meg.
-- A produkciós képernyőképek alapján javítva: megszűnt a fő tartalom kék fókuszkerete, a logó tiszta arculati-board kivágást használ, a klímakategória nyitóblokkja képes szerkesztői elrendezést kapott.
-- A fő és kategória hero-képek aszimmetrikus építészeti vágást, látható narancs sarokrészletet és visszafogott képátmenetet használnak.
-- Mobilon a katalógusszűrő alaphelyzetben összecsukott, az aktív szűrők száma és külön törölhető címkéi látszanak; a terméklista azonnal elérhető.
-- A kosárgomb felolvasott neve tartalmazza a darabszámot, a párbeszédablak nyitáskor fókuszt kap, bezáráskor pedig visszaadja azt a kiinduló vezérlőnek.
-- A teljes statikus kimeneten nincs hiányzó belső hivatkozás, duplikált HTML-azonosító vagy hibás lokális horgony; a 404 oldal nem hivatkozik nem létező nyelvi változatokra.
+- A vizsgált asztali oldalaknál nincs vízszintes túlcsordulás.
+- Eredeti logó, szolgáltatási hero, márkalista és választóeredmények képi ellenőrzése megtörtént.
+- A landing hero teljes szélességű, a két fő szolgáltatáshoz közvetlen CTA-t ad, és nem használ dekoratív sorszámozást.
+- A kapcsolat oldalon és a footerben kattintható email- és telefonszámhivatkozások jelennek meg.
+- A választó billentyűzettel kezelhető rádiómezőket, natív márkaválasztót, jól látható fókuszállapotot és egyértelmű üres állapotot használ.
 - A vizsgált folyamatokban nem keletkezett JavaScript konzolhiba.
 
-A teszt nem minősül teljes WCAG-auditnak. Fizetés, szerveroldali fájlfeltöltés és valós ajánlatküldés nincs bekötve, ezért ilyen folyamat sikerességét nem állítjuk.
+A teszt nem minősül teljes WCAG-auditnak. Valós ajánlatküldés nincs bekötve, ezért annak sikerességét nem állítjuk.

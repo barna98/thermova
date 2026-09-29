@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "THERMOVA bilingual, statically rendered commerce frontend",
+  "description": "THERMOVA bilingual, statically rendered service and lead-generation frontend",
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/server.mjs",
