@@ -26,7 +26,11 @@ export function quotePage(c, q) {
     <h1>${c.t("Segítünk megtalálni<br>a jó megoldást.", "Let’s find the right<br>solution for you.")}</h1>
     <p>${c.t("Írd meg, miben segíthetünk, és add meg az elérhetőséged. Telefonon egyeztetjük a részleteket, majd személyre szabott ajánlatot készítünk.", "Tell us what you need and how to reach you. We’ll discuss the details by phone, then prepare a tailored quote.")}</p></div>
     <div class="lead-layout"><section class="lead-form-panel">${q.complete ? completed(c, q) : `
-      <form id="quote-form">
+      <form id="quote-form" name="${config.quoteFormName}" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="${config.quoteFormName}">
+        <input type="hidden" name="locale" value="${c.lang}">
+        <input type="hidden" name="human-technical-review-required" value="${hp ? "true" : "false"}">
+        <p class="form-honeypot" aria-hidden="true"><label>Ne töltsd ki ezt a mezőt: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
         <fieldset class="lead-interest"><legend id="step-title" tabindex="-1">${c.t("Miben segíthetünk?", "How can we help?")}</legend>
         <div class="option-grid">${[["ac", "Klíma", "Air conditioning"], ["hp", "Hőszivattyú", "Heat pump"]].map(([v,hu,en]) => `<label class="option"><input type="radio" name="interest" value="${v}" required ${q.interest === v ? "checked" : ""}><span>${c.t(hu,en)}</span></label>`).join("")}</div></fieldset>
         <div class="lead-basics fields-grid">
@@ -44,8 +48,7 @@ export function quotePage(c, q) {
         <label class="field"><span>${c.t("Megjegyzés (opcionális)", "Notes (optional)")}</span><textarea name="note" rows="3" maxlength="3000" placeholder="${c.t("Például: három szobába keresek klímát, fűtésre is.", "For example: air conditioning for three rooms, with heating too.")}">${e(q.note)}</textarea></label>
         <label class="consent"><input type="checkbox" name="contact.consent" required ${q.contact.consent ? "checked" : ""}><span>${c.t("Elolvastam az", "I have read the")} <a href="${c.url("adatkezeles")}" target="_blank" rel="noopener">${c.t("adatkezelési tájékoztatót", "privacy information")}</a>, ${c.t("és hozzájárulok, hogy a Thermova az érdeklődésemmel kapcsolatban megkeressen.", "and consent to Thermova contacting me about my enquiry.")}</span></label>
         <p id="form-error" class="form-error" role="alert" hidden></p>
-        ${!config.quoteEndpoint ? `<p class="notice">${c.t("Előnézet: az űrlap még nincs bekötve a fogadó rendszerhez. Az adataidat nem küldjük el; az összefoglalót ellenőrizheted és letöltheted.", "Preview: this form is not connected to a receiving service yet. Your details are not sent; you can review and download the summary.")}</p>` : ""}
-        <button class="button button-wide" type="submit">${config.quoteEndpoint ? c.t("Visszahívást kérek", "Request a callback") : c.t("Érdeklődés áttekintése", "Review enquiry")} ${arrow}</button>
+        <button class="button button-wide" type="submit">${c.t("Visszahívást kérek", "Request a callback")} ${arrow}</button>
         <p class="small lead-hint">${c.t("Kötelezettségmentes érdeklődés. Konkrét ajánlatot az egyeztetés után adunk.", "No-obligation enquiry. Your quote follows a personal consultation.")}</p>
       </form>`}</section>
       <aside class="lead-aside"><p class="eyebrow">${c.t("MI TÖRTÉNIK EZUTÁN?", "WHAT HAPPENS NEXT?")}</p><ul class="lead-next">${[

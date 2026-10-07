@@ -4,7 +4,7 @@ import { escape as e } from "../i18n.js";
 
 function brandList(c, items, kind) {
   const ac = kind === "ac";
-  return `<div class="brand-logo-grid">${items.map((item) => {
+  return `<div class="brand-logo-grid brand-logo-grid-${kind}">${items.map((item) => {
     const href = `${c.url(ac ? "ajanlat" : "rendszer-ajanlat")}?brand=${encodeURIComponent(item.name)}`;
     const asset = item.asset;
     const mark = asset
