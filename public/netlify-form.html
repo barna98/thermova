@@ -3,10 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="robots" content="noindex,nofollow">
-  <meta http-equiv="refresh" content="0;url=/hu/ajanlat/">
   <title>THERMOVA ajánlatkérés</title>
 </head>
 <body>
-  <p><a href="/hu/ajanlat/">Tovább az ajánlatkéréshez</a></p>
+  <!--
+    Build-time form declaration for Netlify Forms.
+    The visible form is rendered on /hu/ajanlat/ and /hu/rendszer-ajanlat/.
+    Keeping the complete field list here makes form detection independent of JavaScript.
+  -->
+  <form name="thermova-ajanlat" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="thermova-ajanlat">
+    <p><label>Ne töltsd ki: <input name="bot-field"></label></p>
+    <input name="locale">
+    <input name="human-technical-review-required">
+    <input name="interest">
+    <input name="roomCount">
+    <input name="area">
+    <input name="contact.name">
+    <input name="contact.phone">
+    <input name="contact.email">
+    <input name="contact.city">
+    <input name="contact.consent">
+    <textarea name="note"></textarea>
+    <button type="submit">Küldés</button>
+  </form>
 </body>
 </html>
