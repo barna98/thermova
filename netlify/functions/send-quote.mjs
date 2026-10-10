@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer";
+import { fileURLToPath } from "node:url";
+
+const logoPath = fileURLToPath(new URL("./assets/thermova-wordmark-transparent.png", import.meta.url));
 
 const escapeHtml = (value = "") => String(value)
   .replaceAll("&", "&amp;")
@@ -25,7 +28,11 @@ function row(label, value, { link } = {}) {
 function emailDocument(data) {
   const interest = data.interest === "hp" ? "Hőszivattyú" : "Klíma";
   const phoneHref = `tel:${data.phone.replace(/[^+\d]/g, "")}`;
-  const logoUrl = `${data.siteUrl.replace(/\/$/, "")}/assets/thermova-wordmark-transparent.png`;
+  const submittedAt = new Intl.DateTimeFormat("hu-HU", {
+    dateStyle: "long",
+    timeStyle: "short",
+    timeZone: "Europe/Budapest",
+  }).format(new Date(data.submittedAt));
   return `<!doctype html>
   <html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
   <body style="margin:0;padding:0;background:#F4F4F2;font-family:Arial,Helvetica,sans-serif;color:#1F2937">
@@ -33,7 +40,7 @@ function emailDocument(data) {
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#F4F4F2"><tr><td align="center" style="padding:24px 12px">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:680px;background:#FFFFFF;border-collapse:collapse;border-top:6px solid #F05A28">
         <tr><td style="padding:34px 36px 24px;border-bottom:1px solid #E5E7EB">
-          <img src="${escapeHtml(logoUrl)}" width="240" alt="THERMOVA" style="display:block;width:240px;max-width:100%;height:auto">
+          <img src="cid:thermova-logo" width="240" alt="THERMOVA" style="display:block;width:240px;max-width:100%;height:auto">
           <p style="margin:14px 0 0;color:#6B7280;font-size:11px;letter-spacing:2.3px">ÉPÜLETENERGETIKAI MEGOLDÁSOK</p>
         </td></tr>
         <tr><td style="padding:34px 36px 8px">
@@ -58,7 +65,7 @@ function emailDocument(data) {
             ${row("Alapterület", data.area ? `${data.area} m²` : "")}
             ${row("Megjegyzés", data.note)}
             ${row("Műszaki ellenőrzés szükséges", yesNo(data.reviewRequired))}
-            ${row("Nyelv", data.locale === "en" ? "Angol" : "Magyar")}
+            ${row("Beküldés nyelve", data.locale === "en" ? "Angol" : "Magyar")}
           </table>
         </td></tr>
         <tr><td style="padding:30px 36px 38px">
@@ -69,7 +76,7 @@ function emailDocument(data) {
           </td></tr></table>
         </td></tr>
         <tr><td style="padding:20px 36px;background:#1F2937;color:#D1D5DB;font-size:12px;line-height:1.6">
-          Beküldve: ${escapeHtml(data.submittedAt)}<br>
+          Beküldve: ${escapeHtml(submittedAt)}<br>
           Adatkezelési hozzájárulás: ${yesNo(data.consent)}
         </td></tr>
       </table>
@@ -78,6 +85,14 @@ function emailDocument(data) {
 }
 
 export async function handler(event) {
+  if (event.httpMethod === "GET") {
+    const configured = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+    return {
+      statusCode: configured ? 200 : 503,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
+      body: JSON.stringify({ service: "thermova-quote-email", configured }),
+    };
+  }
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, headers: { Allow: "POST" }, body: JSON.stringify({ ok: false }) };
   }
@@ -102,7 +117,6 @@ export async function handler(event) {
       locale: request.locale === "en" ? "en" : "hu",
       consent: contact.consent === true,
       submittedAt: clean(payload.submittedAt, 50) || new Date().toISOString(),
-      siteUrl: clean(process.env.SITE_URL, 300) || "https://thermova.hu",
     };
 
     if (!data.name || !data.phone || !data.email || !data.city || !data.consent || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
@@ -116,6 +130,12 @@ export async function handler(event) {
     const recipient = clean(process.env.QUOTE_RECIPIENT, 254) || "info@thermova.hu";
     const from = clean(process.env.SMTP_FROM, 254) || `THERMOVA ajánlatkérés <${smtpUser}>`;
     if (!smtpHost || !smtpUser || !smtpPass || !Number.isFinite(smtpPort)) {
+      console.error("THERMOVA quote email is missing SMTP configuration", {
+        SMTP_HOST: Boolean(smtpHost),
+        SMTP_PORT: Number.isFinite(smtpPort),
+        SMTP_USER: Boolean(smtpUser),
+        SMTP_PASS: Boolean(smtpPass),
+      });
       return { statusCode: 503, body: JSON.stringify({ ok: false, error: "email-not-configured" }) };
     }
 
@@ -148,6 +168,12 @@ export async function handler(event) {
       subject,
       text,
       html: emailDocument(data),
+      attachments: [{
+        filename: "thermova-logo.png",
+        path: logoPath,
+        cid: "thermova-logo",
+        contentDisposition: "inline",
+      }],
     });
 
     return {
