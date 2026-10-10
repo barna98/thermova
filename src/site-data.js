@@ -1,7 +1,7 @@
 export const config = Object.freeze({
   installationPrice: 109000,
-  quoteEndpoint: "/.netlify/functions/send-quote",
-  quoteProvider: "netlify-function",
+  quoteEndpoint: "/",
+  quoteProvider: "netlify",
   quoteFormName: "thermova-ajanlat",
   siteOrigin: "https://thermova.hu",
 });

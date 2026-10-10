@@ -236,24 +236,18 @@ document.addEventListener("submit", async (event) => {
     submit.disabled = true;
     submit.textContent = c.t("Küldés…", "Sending…");
     try {
-      const request = leadPayload(quote, c.lang);
+      const body = new URLSearchParams(new FormData(form));
+      body.set("form-name", config.quoteFormName);
+      body.set("human-technical-review-required", String(leadPayload(quote, c.lang).humanTechnicalReviewRequired));
       const response = await fetch(config.quoteEndpoint, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Accept": "text/html,application/xhtml+xml",
         },
-        body: JSON.stringify({
-          request,
-          submittedAt: new Date().toISOString(),
-          sourceUrl: location.href,
-          botField: form.elements["bot-field"]?.value || "",
-        }),
+        body: body.toString(),
       });
-      if (!response.ok) {
-        const result = await response.json().catch(() => ({}));
-        throw new Error(result.error || `Request failed (${response.status})`);
-      }
+      if (!response.ok) throw new Error("Request failed");
       quote.sent = true;
     } catch {
       submit.disabled = false;
