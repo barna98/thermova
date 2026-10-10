@@ -237,34 +237,23 @@ document.addEventListener("submit", async (event) => {
     submit.textContent = c.t("Küldés…", "Sending…");
     try {
       const request = leadPayload(quote, c.lang);
-      let brandedEmailSent = false;
-      try {
-        const response = await fetch(config.quoteEndpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-          },
-          body: JSON.stringify({
-            request,
-            submittedAt: new Date().toISOString(),
-            sourceUrl: location.href,
-            botField: form.elements["bot-field"]?.value || "",
-          }),
-        });
-        brandedEmailSent = response.ok;
-      } catch {
-        brandedEmailSent = false;
-      }
-      const archiveBody = new URLSearchParams(new FormData(form));
-      archiveBody.set("form-name", config.quoteFormName);
-      archiveBody.set("human-technical-review-required", String(request.humanTechnicalReviewRequired));
-      const archiveResponse = await fetch(config.quoteArchiveEndpoint, {
+      const response = await fetch(config.quoteEndpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: archiveBody.toString(),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          request,
+          submittedAt: new Date().toISOString(),
+          sourceUrl: location.href,
+          botField: form.elements["bot-field"]?.value || "",
+        }),
       });
-      if (!archiveResponse.ok && !brandedEmailSent) throw new Error("Request failed");
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || `Request failed (${response.status})`);
+      }
       quote.sent = true;
     } catch {
       submit.disabled = false;
