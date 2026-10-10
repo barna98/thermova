@@ -154,6 +154,24 @@ function formError(message) {
   element.scrollIntoView({ block: "center" });
 }
 
+function netlifySubmission(quote, lang) {
+  const reviewRequired = leadPayload(quote, lang).humanTechnicalReviewRequired;
+  const body = new URLSearchParams();
+  body.set("form-name", config.quoteFormName);
+  body.set("Érdeklődés", quote.interest === "hp" ? "Hőszivattyú" : "Klíma");
+  body.set("Név", quote.contact.name.trim());
+  body.set("Telefonszám", quote.contact.phone.trim());
+  body.set("Email", quote.contact.email.trim());
+  body.set("Település", quote.contact.city.trim());
+  if (quote.roomCount) body.set("Helyiségek száma", quote.roomCount);
+  if (quote.area) body.set("Alapterület (m²)", quote.area);
+  if (quote.note.trim()) body.set("Megjegyzés", quote.note.trim());
+  body.set("Műszaki ellenőrzés szükséges", reviewRequired ? "Igen" : "Nem");
+  body.set("Nyelv", lang === "hu" ? "Magyar" : "Angol");
+  body.set("Adatkezelési hozzájárulás", quote.contact.consent ? "Igen" : "Nem");
+  return body;
+}
+
 function downloadQuote() {
   const data = {
     schemaVersion: 2,
@@ -236,9 +254,7 @@ document.addEventListener("submit", async (event) => {
     submit.disabled = true;
     submit.textContent = c.t("Küldés…", "Sending…");
     try {
-      const body = new URLSearchParams(new FormData(form));
-      body.set("form-name", config.quoteFormName);
-      body.set("human-technical-review-required", String(leadPayload(quote, c.lang).humanTechnicalReviewRequired));
+      const body = netlifySubmission(quote, c.lang);
       const response = await fetch(config.quoteEndpoint, {
         method: "POST",
         headers: {
