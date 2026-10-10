@@ -133,12 +133,17 @@ function closeDialog() {
 function captureQuote(form) {
   if (!form || !state.quote) return;
   form.querySelectorAll("[name]").forEach((element) => {
+    if (["form-name", "locale", "bot-field", "human-technical-review-required"].includes(element.name)) return;
     if (element.type === "radio" && !element.checked) return;
     const value = element.type === "checkbox" ? element.checked : element.value;
     const parts = element.name.split(".");
     if (parts[0] === "contact") state.quote.contact[parts[1]] = value;
     else state.quote[element.name] = value;
   });
+}
+
+function isLiveFormHost() {
+  return ["thermova.hu", "www.thermova.hu"].includes(location.hostname) || location.hostname.endsWith(".netlify.app");
 }
 
 function formError(message) {
@@ -224,11 +229,25 @@ document.addEventListener("submit", async (event) => {
   }
   const submit = form.querySelector('[type="submit"]');
   if (config.quoteEndpoint) {
+    if (!isLiveFormHost()) {
+      formError(c.t("A helyi előnézet nem küld valódi ajánlatkérést. A közzétett Thermova oldalon az űrlap élesben működik.", "The local preview does not send a real enquiry. The form works on the published Thermova site."));
+      return;
+    }
     submit.disabled = true;
     submit.textContent = c.t("Küldés…", "Sending…");
     try {
-      const response = await fetch(config.quoteEndpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(leadPayload(quote, c.lang)) });
-      if (!response.ok || (await response.json()).success !== true) throw new Error("Request failed");
+      const body = new URLSearchParams(new FormData(form));
+      body.set("form-name", config.quoteFormName);
+      body.set("human-technical-review-required", String(leadPayload(quote, c.lang).humanTechnicalReviewRequired));
+      const response = await fetch(config.quoteEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Accept": "text/html,application/xhtml+xml",
+        },
+        body: body.toString(),
+      });
+      if (!response.ok) throw new Error("Request failed");
       quote.sent = true;
     } catch {
       submit.disabled = false;

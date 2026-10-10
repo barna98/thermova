@@ -1,6 +1,8 @@
 export const config = Object.freeze({
   installationPrice: 109000,
-  quoteEndpoint: null,
+  quoteEndpoint: "/",
+  quoteProvider: "netlify",
+  quoteFormName: "thermova-ajanlat",
   siteOrigin: "https://thermova.hu",
 });
 
@@ -22,12 +24,12 @@ export const climateBrands = Object.freeze([
   { name: "Tesla", asset: "tesla.png" },
 ]);
 
-// Replace these typographic placeholders when the final heat-pump brand list is approved.
 export const heatPumpBrands = Object.freeze([
-  { name: "Aeris" },
-  { name: "Nordiq" },
-  { name: "Sensa" },
-  { name: "Valtek" },
+  { name: "Daikin", asset: "daikin.svg" },
+  { name: "Panasonic", asset: "panasonic.svg" },
+  { name: "LG", asset: "lg.svg" },
+  { name: "Bosch", asset: "bosch.svg" },
+  { name: "Vaillant", asset: "vaillant.svg" },
 ]);
 
 export const installationItems = [

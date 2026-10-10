@@ -3111,21 +3111,22 @@ footer .footer-contact > a:not(.footer-quote) {
 .brand-offer-heading { display: grid; grid-template-columns: 1.15fr .85fr; gap: 64px; align-items: end; margin-bottom: 52px; }
 .brand-offer-heading h2 { margin-bottom: 0; }
 .brand-offer-heading > p { max-width: 600px; margin: 0 0 8px; color: var(--muted); line-height: 1.75; }
-.brand-logo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--graphite); border-left: 1px solid var(--line); }
+.brand-logo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--graphite); border-left: 1px solid var(--line); background: #fff; }
+.brand-logo-grid-hp { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .brand-logo-card { display: flex; min-width: 0; min-height: 245px; flex-direction: column; padding: clamp(24px, 2.5vw, 36px); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--graphite); text-decoration: none; transition: background .25s ease, transform .25s ease, box-shadow .25s ease; }
 .brand-logo-card:hover { position: relative; z-index: 1; background: #fff; transform: translateY(-5px); box-shadow: 0 22px 50px rgba(31,41,55,.09); }
 .brand-logo-card:focus-visible { position: relative; z-index: 2; outline: 3px solid var(--orange); outline-offset: -3px; }
-.brand-logo-mark { display: grid; min-height: 84px; place-items: center; margin-bottom: 24px; }
-.brand-logo-mark img { display: block; width: auto; max-width: 78%; height: auto; max-height: 62px; }
-.brand-logo-mark img[src$="tesla.png"] { filter: brightness(0) saturate(100%) invert(14%) sepia(15%) saturate(1167%) hue-rotate(176deg) brightness(92%) contrast(91%); }
+.brand-logo-mark { display: grid; width: 100%; min-height: 84px; place-items: center; margin-bottom: 24px; }
+.brand-logo-mark img { display: block; width: min(100%, 220px); height: 64px; object-fit: contain; object-position: center; }
+.brand-logo-mark img[src$="tesla.png"] { width: 144px; height: 25px; filter: brightness(0) saturate(100%) invert(14%) sepia(15%) saturate(1167%) hue-rotate(176deg) brightness(92%) contrast(91%); }
 .brand-wordmark { color: var(--graphite); font-size: clamp(1.65rem, 2.7vw, 2.45rem); font-weight: 800; letter-spacing: -.045em; text-transform: uppercase; }
 .brand-logo-meta { color: var(--muted); font-size: .72rem; }
 .brand-logo-card > strong { margin-top: 5px; font-size: clamp(1rem, 1.4vw, 1.28rem); line-height: 1.25; }
 .brand-logo-action { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: auto; padding-top: 26px; color: var(--graphite); font-size: .72rem; font-weight: 750; }
 .brand-logo-card:hover .brand-logo-action { color: var(--orange); }
-.brand-logo-card-simple { min-height: 190px; align-items: center; justify-content: center; text-align: center; }
-.brand-logo-card-simple .brand-logo-mark { width: 100%; min-height: 68px; margin-bottom: 18px; }
-.brand-logo-card-simple > strong { margin: 0; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+.brand-logo-card-simple { min-height: 178px; align-items: center; justify-content: center; text-align: center; }
+.brand-logo-card-simple .brand-logo-mark { width: 100%; min-height: 72px; margin: 0; }
+.visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
 .selector-shell { max-width: 1180px; }
 .selector-intro { display: grid; grid-template-columns: 1.2fr .8fr; gap: clamp(52px, 8vw, 120px); align-items: end; }
 .selector-intro h1 { max-width: 12ch; }
@@ -3179,8 +3180,9 @@ footer .footer-contact > a:not(.footer-quote) {
   .choice-category-grid, .hp-process .choice-category-grid, .recommendation-grid, .home-guidance-grid { grid-template-columns: 1fr; }
   .choice-category-grid article, .choice-category-card { min-height: 210px; }
   .brand-logo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .brand-logo-grid-hp { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .brand-logo-card { min-height: 220px; padding: 24px 18px; }
-  .brand-logo-mark img { max-width: 82%; max-height: 48px; }
+  .brand-logo-mark img { width: min(88%, 220px); height: 52px; }
   .brand-wordmark { font-size: clamp(1.35rem, 7vw, 2rem); }
   .selector-form-expanded .option-grid { grid-template-columns: 1fr; }
   .selector-submit { align-items: stretch; flex-direction: column; }

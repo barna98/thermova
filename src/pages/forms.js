@@ -26,7 +26,7 @@ export function quotePage(c, q) {
     <h1>${c.t("Segítünk megtalálni<br>a jó megoldást.", "Let’s find the right<br>solution for you.")}</h1>
     <p>${c.t("Írd meg, miben segíthetünk, és add meg az elérhetőséged. Telefonon egyeztetjük a részleteket, majd személyre szabott ajánlatot készítünk.", "Tell us what you need and how to reach you. We’ll discuss the details by phone, then prepare a tailored quote.")}</p></div>
     <div class="lead-layout"><section class="lead-form-panel">${q.complete ? completed(c, q) : `
-      <form id="quote-form" name="${config.quoteFormName}" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field">
+      <form id="quote-form" name="${config.quoteFormName}" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" accept-charset="UTF-8">
         <input type="hidden" name="form-name" value="${config.quoteFormName}">
         <input type="hidden" name="locale" value="${c.lang}">
         <input type="hidden" name="human-technical-review-required" value="${hp ? "true" : "false"}">
@@ -50,6 +50,7 @@ export function quotePage(c, q) {
         <p id="form-error" class="form-error" role="alert" hidden></p>
         <button class="button button-wide" type="submit">${c.t("Visszahívást kérek", "Request a callback")} ${arrow}</button>
         <p class="small lead-hint">${c.t("Kötelezettségmentes érdeklődés. Konkrét ajánlatot az egyeztetés után adunk.", "No-obligation enquiry. Your quote follows a personal consultation.")}</p>
+        <noscript><p class="small lead-hint">${c.t("Az űrlap JavaScript nélkül is elküldhető; sikeres küldés után a főoldal jelenik meg.", "The form can also be submitted without JavaScript; after a successful submission, the home page is shown.")}</p></noscript>
       </form>`}</section>
       <aside class="lead-aside"><p class="eyebrow">${c.t("MI TÖRTÉNIK EZUTÁN?", "WHAT HAPPENS NEXT?")}</p><ul class="lead-next">${[
         [c.t("Felhívunk.","We call you."),c.t("Átbeszéljük az igényeidet és a helyszín adottságait.","We discuss your needs and the property.")],

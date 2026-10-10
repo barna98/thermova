@@ -8,11 +8,11 @@ function brandList(c, items, kind) {
     const href = `${c.url(ac ? "ajanlat" : "rendszer-ajanlat")}?brand=${encodeURIComponent(item.name)}`;
     const asset = item.asset;
     const mark = asset
-      ? `<img src="/assets/brands/${asset}" alt="${e(item.name)}" loading="lazy" decoding="async">`
+      ? `<img class="brand-logo-image" src="/assets/brands/${asset}" alt="${e(item.name)}" loading="lazy" decoding="async" width="320" height="96">`
       : `<span class="brand-wordmark">${e(item.name)}</span>`;
     return `<a class="brand-logo-card brand-logo-card-simple" href="${href}" aria-label="${e(item.name)} – ${c.t("ajánlatkérés", "request a quote")}">
       <span class="brand-logo-mark">${mark}</span>
-      <strong>${e(item.name)}</strong>
+      <span class="visually-hidden">${e(item.name)}</span>
     </a>`;
   }).join("")}</div>`;
 }
