@@ -2,7 +2,7 @@
 
 ## Automatizált ellenőrzés
 
-`npm test`: 20/20 sikeres teszt.
+`npm test`: 22/22 sikeres teszt.
 
 - Standard telepítés: 109 000 Ft.
 - Összetett szűrés: méret, használat, ár, márka, zajszint és felszereltségi szint.
@@ -17,6 +17,8 @@
 - A kérdéssor végén az ajánlatkérés nyílik meg, a válaszok pedig bekerülnek a megjegyzésbe.
 - A klímaoldali igénykártyák és márkajelek közvetlenül, megfelelő kontextussal vezetnek az ajánlatkéréshez.
 - A tartalmi kártyákon, kérdéscímeken és ajánlatkérési folyamatban nincs dekoratív sorszámozás.
+- A hőszivattyúoldal öt ellenőrzött márkája helyi, grafit logóval és márkapreferenciát átadó ajánlatkérő hivatkozással jelenik meg.
+- Az ajánlatkérő a production HTML-ben Netlify Forms által felismerhető, névvel ellátott POST űrlapként, honeypot mezővel épül ki.
 
 `npm run build`: 25 statikus oldal létrejön.
 
@@ -27,12 +29,13 @@
 - A klímaigény-felmérés nem állít elő automatikus terméklistát vagy árat; az ajánlatkéréshez vezet, ahol személyes egyeztetés indul.
 - Az egyoldalas visszahíváskérőn a klíma/hőszivattyú választás, az opcionális helyiségszám és terület, valamint a kötelező kapcsolati adatok működnek.
 - A név, email, telefonszám, település és adatkezelési hozzájárulás kötelező; hibás email címmel az űrlap nem küldhető tovább.
-- Bekötött fogadó végpont nélkül az összefoglaló egyértelműen jelzi, hogy nem történt adatküldés vagy visszahíváskérés.
+- Helyi előnézetben valódi adat nem küldhető el; a felület ezt egyértelmű hibajelzésben közli.
 - A lead-adatcsomag nem tartalmaz automatikus árat vagy nem választott alapértelmezett készüléket; két vagy több klímánál és minden hőszivattyúnál emberi ellenőrzést kér.
 - A vizsgált asztali oldalaknál nincs vízszintes túlcsordulás.
 - A mobil igényfelmérés és ajánlatkérés 390 px szélességen sem okoz vízszintes túlcsordulást.
 - Az igényfelmérés válaszai olvasható összefoglalóként átkerülnek az ajánlatkérés megjegyzésébe.
 - A klímamárka kattintása közvetlenül az ajánlatkéréshez vezet, és átadja a márkapreferenciát.
+- A hőszivattyúmárkák egyetlen, azonos magasságú asztali logósorban jelennek meg; kattintásuk hőszivattyúra állított, márkapreferenciával előtöltött ajánlatkérést nyit.
 - A build 26 HTML-fájljának belső hivatkozásai érvényesek; publikus modellnév vagy készülékár nem maradt bennük.
 - Eredeti logó, szolgáltatási hero, márkalista és igényfelmérés képi ellenőrzése megtörtént.
 - A landing hero teljes szélességű, a két fő szolgáltatáshoz közvetlen CTA-t ad, és nem használ dekoratív sorszámozást.
@@ -40,4 +43,4 @@
 - A választó billentyűzettel kezelhető rádiómezőket, natív márkaválasztót és jól látható fókuszállapotot használ.
 - A vizsgált folyamatokban nem keletkezett JavaScript konzolhiba.
 
-A teszt nem minősül teljes WCAG-auditnak. Valós ajánlatküldés nincs bekötve, ezért annak sikerességét nem állítjuk.
+A teszt nem minősül teljes WCAG-auditnak. A Netlify-beküldés kliens- és buildoldali integrációja elkészült; a tényleges kézbesítés csak a projekt Forms-felismerésének és email-értesítésének Netlify-fiókbeli bekapcsolása, majd az új verzió deploya után ellenőrizhető.

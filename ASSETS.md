@@ -52,4 +52,12 @@ A klímaválasztóban szereplő gyártók logói helyi fájlokként találhatók
 - TCL: Wikimedia Commons, a TCL Electronics hivatalos forrására hivatkozó `Logo of the TCL Corporation.svg`.
 - Tesla háztartási elektronika: a `tesla.info` hivatalos weboldalának fejléc-logója. Ez nem a Tesla autógyártó logója.
 
-A jelenlegi hőszivattyús katalógusban szereplő Nordiq, Valtek, Aeris és Sensa megnevezésekhez nincs a projektben hitelesen dokumentált gyártói logó. Ezek ezért átmenetileg egységes tipográfiai szójelként jelennek meg; valódi logóra csak a Thermova tényleges hőszivattyú-márkáinak véglegesítése után cserélhetők.
+## Hőszivattyú-márkák
+
+A hőszivattyúoldal öt, Magyarországon hivatalos kínálattal rendelkező gyártót mutat be. A logók a klímamárkákkal azonos módon grafit (`#1F2937`) színre egységesítve jelennek meg; a márkajel formája és aránya változatlan. A megjelenés tájékoztató jellegű, a logók az adott gyártók védjegyei.
+
+- Daikin: a már meglévő helyi Daikin szójel; magyar kínálat: `https://www.daikin.hu/hu_hu/termekcsaladok/energiahatekony-hoszivattyu-LT-alacsony/daikin_altherma_3_r.html`.
+- Panasonic: Wikimedia Commons, `Panasonic logo.svg`; magyar Aquarea kínálat: `https://www.aircon.panasonic.eu/HU_hu/ranges/aquarea/`.
+- LG: Wikimedia Commons, `LG Electronics Logo (modern).svg`; magyar THERMA V kínálat: `https://www.lg.com/hu/levego-viz-hoszivattyuk/`.
+- Bosch: Wikimedia Commons, `Bosch-Logo.svg`; magyar hőszivattyú-kínálat: `https://www.bosch-homecomfort.com/hu/hu/ocs/residential/hoszivattyuk-640853-c/`.
+- Vaillant: Wikimedia Commons, `Vaillant-logo-2021.svg`; magyar aroTHERM kínálat: `https://www.vaillant.hu/termekek/arothermplus/`.

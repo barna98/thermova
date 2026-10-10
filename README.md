@@ -28,9 +28,11 @@ A `dist/` a statikus tárhelyre feltölthető kimenet. A kiszolgálás gyökere 
 - Kattintható, nagy antracit márkajelrács: a márkák közvetlenül az adott preferenciával előkészített ajánlatkéréshez vezetnek.
 - A klímaoldal felhasználási kártyái közvetlenül az ajánlatkéréshez vezetnek, és a választott igényt előre kitöltik a megjegyzésben.
 - Hőszivattyúoldal rendszer- és tervezési szemlélettel. Minden hőszivattyús projekt szakemberi validációhoz kötött.
+- A hőszivattyúoldalon öt, Magyarországon hivatalos kínálattal rendelkező gyártó — Daikin, Panasonic, LG, Bosch és Vaillant — egységes grafit márkajelként jelenik meg.
 - Öt szempontos klímaigény-felmérés: helyiségméret, helyiségtípus, használat, zajigény és komfortszint, opcionális márkával.
 - A kérdéssor végén a felhasználó közvetlenül az ajánlatkéréshez jut. A válaszok automatikusan bekerülnek a megjegyzésbe; a Thermova egyeztetés után 2–3 megfelelő lehetőséget küld.
 - Rövid, egyoldalas visszahíváskérő klímához és hőszivattyúhoz. A név, telefon, email, település és adatkezelési hozzájárulás kötelező.
+- Az ajánlatkérő Netlify Forms-kompatibilis, honeypot spamvédelemmel és böngészőoldali siker-/hibaállapottal. A közzétett Netlify oldalon a beküldések a `thermova-ajanlat` űrlaphoz érkeznek.
 - Több klímánál, illetve minden hőszivattyús projektnél emberi műszaki ellenőrzés jelzése.
 - Billentyűzettel kezelhető vezérlők, szemantikus címsorok, címkézett mezők, fókuszállapotok és csökkentett animációs beállítás támogatása.
 - A navigációban, kártyákon, kérdéscímeken és folyamatleírásokban nincs dekoratív sorszámozás.
@@ -51,14 +53,16 @@ A standard klímatelepítés mindenhol **109 000 Ft bruttó**.
 - `scripts/` — függőségmentes statikus build és helyi előnézeti kiszolgáló.
 - `tests/` — üzleti és renderelési regressziós tesztek.
 
-## Élesítés előtt
+## Netlify élesítés
 
-A frontend alapbeállításban nem küld adatot: ellenőrizhető és letölthető JSON-összefoglalót készít. A `config.quoteEndpoint` megadásával JSON-alapú fogadó végponthoz köthető. Nincs webshop, fizetés, rendeléskezelő backend vagy készletkapcsolat.
+A gyökérben lévő `netlify.toml` beállítja az `npm run build` buildparancsot, a `dist` publikálási mappát és a Node.js 20 környezetet. A Netlify projektben a **Forms** oldalon egyszer engedélyezni kell az automatikus űrlapfelismerést, majd új deploy szükséges. A beküldések ezután a Netlify **Forms → thermova-ajanlat** nézetében jelennek meg.
 
-Élesítés előtt véglegesíteni kell a hőszivattyús márkalistát, a cégadatokat, az adatkezelési tájékoztatót és a fogadó integrációt. A standard telepítés publikus díja 109 000 Ft; készülék- és rendszerárat a weboldal nem közöl.
+Email-értesítéshez a Netlify projektben: **Forms → Submission notifications → Add notification → Email notification**, címzettként `info@thermova.hu`. Ez fiókszintű beállítás, ezért nem tárolható a frontend forráskódjában.
+
+Nincs webshop, fizetés, rendeléskezelő backend vagy készletkapcsolat. A standard telepítés publikus díja 109 000 Ft; készülék- és rendszerárat a weboldal nem közöl.
 
 Az oldalak statikusan olvashatók, saját címmel, meta leírással, canonical címmel és HU/EN alternatív hivatkozásokkal. A céges és szolgáltatási oldalak indexelhetők, az űrlapok `noindex,follow` jelölést kapnak. A build sitemapet is készít.
 
-Kapcsolati adat nem kerül tartós tárolásba; újratöltéskor az ajánlatkérési vázlat törlődik. Nincs analitika vagy külső betűszolgáltatás.
+Az ajánlatkéréseket a közzétett oldalon a Netlify Forms tárolja; a helyi előnézet nem küld valós adatot. Nincs analitika vagy külső betűszolgáltatás.
 
 Az ellenőrzési eredményeket a `QA.md`, a képek eredetét és generálási utasításait az `ASSETS.md` tartalmazza.
